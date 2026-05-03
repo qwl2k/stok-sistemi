@@ -3,16 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stok Durum Sistemi</title>
+<title>Stok Sistemi</title>
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
-  font-family:Arial, sans-serif;
-  background:#f3f5f9;
-  color:#111827;
+  font-family:Arial,sans-serif;
+  background:#0f172a;
+  color:#e5e7eb;
 }
+
 .hidden{display:none!important}
 
 .login{
@@ -20,100 +22,178 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:20px;
 }
-.login-card,.panel{
-  background:white;
+
+.login-card,.panel,.card{
+  background:#111827;
+  border:1px solid #1f2937;
   border-radius:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-  padding:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
 }
-.login-card{width:360px;text-align:center}
-input{
+
+.login-card{
+  width:360px;
+  padding:30px;
+  text-align:center;
+}
+
+input,select{
   width:100%;
   padding:13px;
   margin:8px 0;
-  border:1px solid #d1d5db;
+  background:#020617;
+  color:white;
+  border:1px solid #334155;
   border-radius:10px;
-  outline:none;
 }
+
 button{
   border:0;
   border-radius:10px;
-  padding:13px 18px;
-  background:#111827;
+  padding:12px 16px;
+  background:#2563eb;
   color:white;
   cursor:pointer;
   font-weight:bold;
 }
+
 button:hover{opacity:.9}
+
 .danger{background:#dc2626}
 .green{background:#16a34a}
+.orange{background:#f97316}
 
 .app{
-  max-width:1150px;
-  margin:30px auto;
+  display:grid;
+  grid-template-columns:1fr 220px;
+  gap:20px;
+  max-width:1300px;
+  margin:25px auto;
   padding:15px;
 }
+
+.side{
+  background:#111827;
+  border:1px solid #1f2937;
+  border-radius:18px;
+  padding:18px;
+  height:max-content;
+  position:sticky;
+  top:20px;
+}
+
+.side button{
+  width:100%;
+  margin:7px 0;
+  background:#1f2937;
+}
+
+.side button.active{
+  background:#2563eb;
+}
+
 .topbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
   margin-bottom:18px;
 }
+
 .cards{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:15px;
   margin-bottom:18px;
 }
-.card{
-  background:white;
-  padding:20px;
-  border-radius:16px;
-  box-shadow:0 6px 18px rgba(0,0,0,.05);
-}
-.card h3{margin:0;color:#6b7280;font-size:14px}
-.card p{font-size:28px;font-weight:bold;margin:8px 0 0}
 
-.panel{margin-bottom:18px}
+.card{
+  padding:20px;
+}
+
+.card h3{
+  margin:0;
+  color:#94a3b8;
+  font-size:14px;
+}
+
+.card p{
+  font-size:30px;
+  font-weight:bold;
+  margin:8px 0 0;
+}
+
+.panel{
+  padding:22px;
+  margin-bottom:18px;
+}
+
 .form{
   display:grid;
-  grid-template-columns:2fr 1fr 1.5fr auto;
+  grid-template-columns:1.5fr 1fr 1fr 1.5fr auto;
   gap:10px;
 }
-.search{margin-top:10px}
+
+.order-form{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr auto;
+  gap:10px;
+}
+
+.search-title{
+  margin-top:20px;
+  margin-bottom:5px;
+  color:#93c5fd;
+}
 
 table{
   width:100%;
   border-collapse:collapse;
 }
+
 th,td{
-  padding:14px;
-  border-bottom:1px solid #e5e7eb;
+  padding:13px;
+  border-bottom:1px solid #1f2937;
   text-align:left;
 }
+
 th{
-  background:#f9fafb;
-  color:#6b7280;
+  color:#93c5fd;
+  background:#020617;
 }
+
 .badge{
   padding:6px 10px;
   border-radius:999px;
   font-size:13px;
   font-weight:bold;
 }
-.ok{background:#dcfce7;color:#166534}
-.low{background:#fee2e2;color:#991b1b}
+
+.ok{background:#064e3b;color:#86efac}
+.low{background:#7f1d1d;color:#fecaca}
+.wait{background:#78350f;color:#fde68a}
+.done{background:#064e3b;color:#86efac}
+
 .code{
   font-family:monospace;
+  color:#60a5fa;
   font-weight:bold;
 }
 
-@media(max-width:800px){
+.product-img{
+  width:55px;
+  height:55px;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid #334155;
+}
+
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:static}
   .cards{grid-template-columns:1fr}
-  .form{grid-template-columns:1fr}
-  .topbar{flex-direction:column;align-items:flex-start;gap:10px}
-  table{font-size:13px}
+  .form,.order-form{grid-template-columns:1fr}
+  table{font-size:12px}
 }
 </style>
 </head>
@@ -123,88 +203,166 @@ th{
 <div class="login" id="loginBox">
   <div class="login-card">
     <h1>Admin Girişi</h1>
-    <p>Stok Durum Sistemine hoş geldiniz</p>
+    <p>Stok yönetim paneli</p>
     <input id="user" placeholder="Kullanıcı adı">
     <input id="pass" type="password" placeholder="Şifre">
     <button style="width:100%" onclick="login()">Giriş Yap</button>
-    <p id="loginMsg" style="color:red"></p>
+    <p id="loginMsg" style="color:#f87171"></p>
   </div>
 </div>
 
 <div class="app hidden" id="app">
 
-  <div class="topbar">
-    <div>
-      <h1>📦 Stok Durum Sistemi</h1>
-      <p>Ürünlerini, adetlerini ve raf konumlarını takip et.</p>
-    </div>
-    <button class="danger" onclick="logout()">Çıkış Yap</button>
-  </div>
+  <main>
 
-  <div class="cards">
-    <div class="card">
-      <h3>Toplam Ürün</h3>
-      <p id="totalItems">0</p>
-    </div>
-    <div class="card">
-      <h3>Toplam Stok</h3>
-      <p id="totalStock">0</p>
-    </div>
-    <div class="card">
-      <h3>Stok Az</h3>
-      <p id="lowStock">0</p>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h2>Ürün Ekle</h2>
-    <div class="form">
-      <input id="name" placeholder="Ürün adı">
-      <input id="qty" type="number" placeholder="Adet">
-      <input id="place" placeholder="Raf / Konum">
-      <button class="green" onclick="addItem()">Ürün Ekle</button>
+    <div class="topbar">
+      <div>
+        <h1>📦 Stok Yönetim Sistemi</h1>
+        <p>Ürün, stok, konum ve sipariş takibi</p>
+      </div>
+      <button class="danger" onclick="logout()">Çıkış</button>
     </div>
 
-    <input class="search" id="search" placeholder="Kod veya ürün adı ara..." oninput="render()">
-  </div>
+    <section id="productsPage">
 
-  <div class="panel">
-    <h2>Ürün Listesi</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Kod</th>
-          <th>Ürün</th>
-          <th>Adet</th>
-          <th>Konum</th>
-          <th>Durum</th>
-          <th>İşlem</th>
-        </tr>
-      </thead>
-      <tbody id="list"></tbody>
-    </table>
-  </div>
+      <div class="cards">
+        <div class="card">
+          <h3>Toplam Ürün</h3>
+          <p id="totalItems">0</p>
+        </div>
+        <div class="card">
+          <h3>Toplam Stok</h3>
+          <p id="totalStock">0</p>
+        </div>
+        <div class="card">
+          <h3>Stok Az</h3>
+          <p id="lowStock">0</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Ürün Ekle</h2>
+        <div class="form">
+          <input id="name" placeholder="Ürün adı">
+          <input id="qty" type="number" placeholder="Adet">
+          <input id="place" placeholder="Raf / Konum">
+          <input id="image" placeholder="Fotoğraf linki">
+          <button class="green" onclick="addItem()">Ekle</button>
+        </div>
+
+        <h3 class="search-title">Ürün Arama</h3>
+        <input id="search" placeholder="Kod, ürün adı veya raf konumu ara..." oninput="renderProducts()">
+      </div>
+
+      <div class="panel">
+        <h2>Ürün Listesi</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Kod</th>
+              <th>Ürün</th>
+              <th>Adet</th>
+              <th>Konum</th>
+              <th>Durum</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="list"></tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <section id="ordersPage" class="hidden">
+
+      <div class="panel">
+        <h2>🧾 Sipariş Ekle</h2>
+
+        <div class="order-form">
+          <select id="orderProduct"></select>
+          <input id="orderLink" placeholder="Sipariş linki">
+          <input id="orderNote" placeholder="Not">
+          <select id="orderStatus">
+            <option>Sipariş edildi</option>
+            <option>Hazırlanıyor</option>
+            <option>Kargoda</option>
+            <option>Teslim edildi</option>
+          </select>
+          <button class="orange" onclick="addOrder()">Sipariş Ekle</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Siparişler</h2>
+        <input id="orderSearch" placeholder="Sipariş kodu veya ürün adı ara..." oninput="renderOrders()">
+
+        <table>
+          <thead>
+            <tr>
+              <th>Sipariş Kodu</th>
+              <th>Ürün</th>
+              <th>Ürün Kodu</th>
+              <th>Durum</th>
+              <th>Link</th>
+              <th>Not</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="ordersList"></tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </main>
+
+  <aside class="side">
+    <h2>Menü</h2>
+    <button id="btnProducts" class="active" onclick="showPage('products')">📦 Ürünler</button>
+    <button id="btnOrders" onclick="showPage('orders')">🧾 Siparişler</button>
+  </aside>
 
 </div>
 
 <script>
 let items = JSON.parse(localStorage.getItem("stok")) || [];
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
 function login(){
-  if(user.value === "admin" && pass.value === "1234"){
-    loginBox.classList.add("hidden");
-    app.classList.remove("hidden");
-    render();
+  const u = document.getElementById("user").value;
+  const p = document.getElementById("pass").value;
+
+  if(u === "admin" && p === "1234"){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    renderProducts();
+    renderOrders();
+    fillProductOptions();
   }else{
-    loginMsg.innerText = "Hatalı kullanıcı adı veya şifre";
+    document.getElementById("loginMsg").innerText = "Hatalı kullanıcı adı veya şifre";
   }
 }
 
 function logout(){
-  app.classList.add("hidden");
-  loginBox.classList.remove("hidden");
-  user.value = "";
-  pass.value = "";
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("loginBox").classList.remove("hidden");
+}
+
+function showPage(page){
+  document.getElementById("productsPage").classList.add("hidden");
+  document.getElementById("ordersPage").classList.add("hidden");
+  document.getElementById("btnProducts").classList.remove("active");
+  document.getElementById("btnOrders").classList.remove("active");
+
+  if(page === "products"){
+    document.getElementById("productsPage").classList.remove("hidden");
+    document.getElementById("btnProducts").classList.add("active");
+  }else{
+    document.getElementById("ordersPage").classList.remove("hidden");
+    document.getElementById("btnOrders").classList.add("active");
+    fillProductOptions();
+  }
 }
 
 function randomCode(){
@@ -216,13 +374,22 @@ function randomCode(){
   return code;
 }
 
-function save(){
+function saveProducts(){
   localStorage.setItem("stok", JSON.stringify(items));
 }
 
+function saveOrders(){
+  localStorage.setItem("orders", JSON.stringify(orders));
+}
+
 function addItem(){
+  const name = document.getElementById("name");
+  const qty = document.getElementById("qty");
+  const place = document.getElementById("place");
+  const image = document.getElementById("image");
+
   if(name.value.trim()==="" || qty.value==="" || place.value.trim()===""){
-    alert("Lütfen tüm alanları doldur.");
+    alert("Ürün adı, adet ve konum boş kalamaz.");
     return;
   }
 
@@ -230,26 +397,34 @@ function addItem(){
     code: randomCode(),
     name: name.value.trim(),
     qty: Number(qty.value),
-    place: place.value.trim()
+    place: place.value.trim(),
+    image: image.value.trim()
   });
 
-  save();
+  saveProducts();
+
   name.value="";
   qty.value="";
   place.value="";
-  render();
+  image.value="";
+
+  renderProducts();
+  fillProductOptions();
 }
 
 function deleteItem(index){
   if(confirm("Bu ürünü silmek istiyor musun?")){
     items.splice(index,1);
-    save();
-    render();
+    saveProducts();
+    renderProducts();
+    fillProductOptions();
   }
 }
 
-function render(){
-  let searchText = search.value.toLowerCase();
+function renderProducts(){
+  const list = document.getElementById("list");
+  const searchText = document.getElementById("search").value.toLowerCase();
+
   list.innerHTML = "";
 
   let totalQty = 0;
@@ -259,13 +434,17 @@ function render(){
     totalQty += item.qty;
     if(item.qty <= 3) lowCount++;
 
-    if(
-      item.name.toLowerCase().includes(searchText) ||
-      item.code.toLowerCase().includes(searchText) ||
-      item.place.toLowerCase().includes(searchText)
-    ){
+    const searchable = 
+      item.name.toLowerCase() + " " +
+      item.code.toLowerCase() + " " +
+      item.place.toLowerCase();
+
+    if(searchable.includes(searchText)){
       list.innerHTML += `
       <tr>
+        <td>
+          <img class="product-img" src="${item.image || 'https://via.placeholder.com/60'}">
+        </td>
         <td class="code">${item.code}</td>
         <td>${item.name}</td>
         <td>${item.qty}</td>
@@ -282,9 +461,95 @@ function render(){
     }
   });
 
-  totalItems.innerText = items.length;
-  totalStock.innerText = totalQty;
-  lowStock.innerText = lowCount;
+  document.getElementById("totalItems").innerText = items.length;
+  document.getElementById("totalStock").innerText = totalQty;
+  document.getElementById("lowStock").innerText = lowCount;
+}
+
+function fillProductOptions(){
+  const select = document.getElementById("orderProduct");
+  select.innerHTML = "";
+
+  if(items.length === 0){
+    select.innerHTML = `<option>Önce ürün ekle</option>`;
+    return;
+  }
+
+  items.forEach((item,index)=>{
+    select.innerHTML += `
+      <option value="${index}">
+        ${item.name} - ${item.code}
+      </option>`;
+  });
+}
+
+function addOrder(){
+  if(items.length === 0){
+    alert("Önce ürün eklemelisin.");
+    return;
+  }
+
+  const productIndex = document.getElementById("orderProduct").value;
+  const product = items[productIndex];
+
+  orders.push({
+    orderCode: randomCode(),
+    productName: product.name,
+    productCode: product.code,
+    link: document.getElementById("orderLink").value.trim(),
+    note: document.getElementById("orderNote").value.trim(),
+    status: document.getElementById("orderStatus").value
+  });
+
+  saveOrders();
+
+  document.getElementById("orderLink").value = "";
+  document.getElementById("orderNote").value = "";
+
+  renderOrders();
+}
+
+function deleteOrder(index){
+  if(confirm("Bu siparişi silmek istiyor musun?")){
+    orders.splice(index,1);
+    saveOrders();
+    renderOrders();
+  }
+}
+
+function renderOrders(){
+  const ordersList = document.getElementById("ordersList");
+  const searchText = document.getElementById("orderSearch").value.toLowerCase();
+
+  ordersList.innerHTML = "";
+
+  orders.forEach((order,index)=>{
+    const searchable =
+      order.orderCode.toLowerCase() + " " +
+      order.productName.toLowerCase() + " " +
+      order.productCode.toLowerCase();
+
+    if(searchable.includes(searchText)){
+      ordersList.innerHTML += `
+      <tr>
+        <td class="code">${order.orderCode}</td>
+        <td>${order.productName}</td>
+        <td class="code">${order.productCode}</td>
+        <td>
+          <span class="badge ${order.status === 'Teslim edildi' ? 'done' : 'wait'}">
+            ${order.status}
+          </span>
+        </td>
+        <td>
+          ${order.link ? `<a style="color:#60a5fa" href="${order.link}" target="_blank">Aç</a>` : "-"}
+        </td>
+        <td>${order.note || "-"}</td>
+        <td>
+          <button class="danger" onclick="deleteOrder(${index})">Sil</button>
+        </td>
+      </tr>`;
+    }
+  });
 }
 </script>
 

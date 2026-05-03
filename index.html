@@ -3,128 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stok Sistemim</title>
+<title>Stok Durum Sistemi</title>
 
 <style>
+*{box-sizing:border-box}
 body{
-  font-family:Arial;
-  background:#f4f6f8;
   margin:0;
+  font-family:Arial, sans-serif;
+  background:#f3f5f9;
+  color:#111827;
 }
+.hidden{display:none!important}
 
-/* Kart /
-.box{
-  max-width:900px;
-  margin:40px auto;
+.login{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.login-card,.panel{
   background:white;
-  padding:25px;
-  border-radius:15px;
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  padding:28px;
 }
-
-/ Input /
+.login-card{width:360px;text-align:center}
 input{
-  padding:12px;
-  margin:6px;
-  border-radius:8px;
-  border:1px solid #ccc;
+  width:100%;
+  padding:13px;
+  margin:8px 0;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  outline:none;
 }
-
-/ Buton /
 button{
-  padding:12px;
-  margin:6px;
-  border-radius:8px;
-  border:none;
-  background:black;
+  border:0;
+  border-radius:10px;
+  padding:13px 18px;
+  background:#111827;
   color:white;
   cursor:pointer;
+  font-weight:bold;
 }
+button:hover{opacity:.9}
+.danger{background:#dc2626}
+.green{background:#16a34a}
 
-/ Tablo /
+.app{
+  max-width:1150px;
+  margin:30px auto;
+  padding:15px;
+}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-bottom:18px;
+}
+.card{
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 6px 18px rgba(0,0,0,.05);
+}
+.card h3{margin:0;color:#6b7280;font-size:14px}
+.card p{font-size:28px;font-weight:bold;margin:8px 0 0}
+
+.panel{margin-bottom:18px}
+.form{
+  display:grid;
+  grid-template-columns:2fr 1fr 1.5fr auto;
+  gap:10px;
+}
+.search{margin-top:10px}
+
 table{
   width:100%;
   border-collapse:collapse;
-  margin-top:20px;
 }
 th,td{
-  padding:10px;
-  border-bottom:1px solid #ddd;
+  padding:14px;
+  border-bottom:1px solid #e5e7eb;
+  text-align:left;
 }
-
-/ Stok az /
-.low{
-  color:red;
+th{
+  background:#f9fafb;
+  color:#6b7280;
+}
+.badge{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:bold;
+}
+.ok{background:#dcfce7;color:#166534}
+.low{background:#fee2e2;color:#991b1b}
+.code{
+  font-family:monospace;
   font-weight:bold;
 }
 
-.hidden{
-  display:none;
+@media(max-width:800px){
+  .cards{grid-template-columns:1fr}
+  .form{grid-template-columns:1fr}
+  .topbar{flex-direction:column;align-items:flex-start;gap:10px}
+  table{font-size:13px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div class="box" id="loginBox">
-  <h2>Admin Girişi</h2>
-  <input id="user" placeholder="Kullanıcı adı">
-  <input id="pass" type="password" placeholder="Şifre">
-  <button onclick="login()">Giriş Yap</button>
-  <p id="loginMsg"></p>
+<div class="login" id="loginBox">
+  <div class="login-card">
+    <h1>Admin Girişi</h1>
+    <p>Stok Durum Sistemine hoş geldiniz</p>
+    <input id="user" placeholder="Kullanıcı adı">
+    <input id="pass" type="password" placeholder="Şifre">
+    <button style="width:100%" onclick="login()">Giriş Yap</button>
+    <p id="loginMsg" style="color:red"></p>
+  </div>
 </div>
 
-<!-- APP -->
-<div class="box hidden" id="app">
+<div class="app hidden" id="app">
 
-  <h1>Stok Durum Sistemi</h1>
+  <div class="topbar">
+    <div>
+      <h1>📦 Stok Durum Sistemi</h1>
+      <p>Ürünlerini, adetlerini ve raf konumlarını takip et.</p>
+    </div>
+    <button class="danger" onclick="logout()">Çıkış Yap</button>
+  </div>
 
-  <h3>Ürün Ekle</h3>
-  <input id="name" placeholder="Ürün adı">
-  <input id="qty" type="number" placeholder="Adet">
-  <input id="place" placeholder="Raf / Konum">
-  <button onclick="addItem()">Ekle</button>
+  <div class="cards">
+    <div class="card">
+      <h3>Toplam Ürün</h3>
+      <p id="totalItems">0</p>
+    </div>
+    <div class="card">
+      <h3>Toplam Stok</h3>
+      <p id="totalStock">0</p>
+    </div>
+    <div class="card">
+      <h3>Stok Az</h3>
+      <p id="lowStock">0</p>
+    </div>
+  </div>
 
-  <br>
+  <div class="panel">
+    <h2>Ürün Ekle</h2>
+    <div class="form">
+      <input id="name" placeholder="Ürün adı">
+      <input id="qty" type="number" placeholder="Adet">
+      <input id="place" placeholder="Raf / Konum">
+      <button class="green" onclick="addItem()">Ürün Ekle</button>
+    </div>
 
-  <input id="search" placeholder="Ara..." oninput="render()">
+    <input class="search" id="search" placeholder="Kod veya ürün adı ara..." oninput="render()">
+  </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Kod</th>
-        <th>Ürün</th>
-        <th>Adet</th>
-        <th>Konum</th>
-        <th>Durum</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="list"></tbody>
-  </table>
+  <div class="panel">
+    <h2>Ürün Listesi</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Kod</th>
+          <th>Ürün</th>
+          <th>Adet</th>
+          <th>Konum</th>
+          <th>Durum</th>
+          <th>İşlem</th>
+        </tr>
+      </thead>
+      <tbody id="list"></tbody>
+    </table>
+  </div>
 
 </div>
 
 <script>
-
 let items = JSON.parse(localStorage.getItem("stok")) || [];
 
 function login(){
-  if(user.value=="admin" && pass.value=="1234"){
+  if(user.value === "admin" && pass.value === "1234"){
     loginBox.classList.add("hidden");
     app.classList.remove("hidden");
     render();
   }else{
-    loginMsg.innerText="Hatalı giriş";
+    loginMsg.innerText = "Hatalı kullanıcı adı veya şifre";
   }
 }
 
-/ RANDOM KOD */
+function logout(){
+  app.classList.add("hidden");
+  loginBox.classList.remove("hidden");
+  user.value = "";
+  pass.value = "";
+}
+
 function randomCode(){
-  const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let code="";
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
   for(let i=0;i<8;i++){
-    code+=chars[Math.floor(Math.random()chars.length)];
+    code += chars[Math.floor(Math.random()*chars.length)];
   }
   return code;
 }
@@ -133,54 +220,72 @@ function save(){
   localStorage.setItem("stok", JSON.stringify(items));
 }
 
-/ ÜRÜN EKLE /
 function addItem(){
-
-  if(name.value=="" || qty.value=="" || place.value==""){
-    alert("Boş bırakma!");
+  if(name.value.trim()==="" || qty.value==="" || place.value.trim()===""){
+    alert("Lütfen tüm alanları doldur.");
     return;
   }
 
   items.push({
     code: randomCode(),
-    name: name.value,
+    name: name.value.trim(),
     qty: Number(qty.value),
-    place: place.value
+    place: place.value.trim()
   });
 
   save();
-
   name.value="";
   qty.value="";
   place.value="";
-
   render();
 }
 
-/ SİL /
-function deleteItem(i){
-  items.splice(i,1);
-  save();
-  render();
+function deleteItem(index){
+  if(confirm("Bu ürünü silmek istiyor musun?")){
+    items.splice(index,1);
+    save();
+    render();
+  }
 }
 
-/ GÖSTER */
 function render(){
-
   let searchText = search.value.toLowerCase();
-  list.innerHTML="";
+  list.innerHTML = "";
+
+  let totalQty = 0;
+  let lowCount = 0;
 
   items.forEach((item,index)=>{
+    totalQty += item.qty;
+    if(item.qty <= 3) lowCount++;
 
-    if(item.name.toLowerCase().includes(searchText) ||
-       item.code.toLowerCase().includes(searchText)){
-
-      list.innerHTML +=        <tr>         <td>${item.code}</td>         <td>${item.name}</td>         <td>${item.qty}</td>         <td>${item.place}</td>         <td class="${item.qty <= 3 ? 'low' : ''}">           ${item.qty <= 3 ? 'Stok az' : 'Yeterli'}         </td>         <td>           <button onclick="deleteItem(${index})">Sil</button>         </td>       </tr>;
+    if(
+      item.name.toLowerCase().includes(searchText) ||
+      item.code.toLowerCase().includes(searchText) ||
+      item.place.toLowerCase().includes(searchText)
+    ){
+      list.innerHTML += `
+      <tr>
+        <td class="code">${item.code}</td>
+        <td>${item.name}</td>
+        <td>${item.qty}</td>
+        <td>${item.place}</td>
+        <td>
+          <span class="badge ${item.qty <= 3 ? 'low' : 'ok'}">
+            ${item.qty <= 3 ? 'Stok az' : 'Yeterli'}
+          </span>
+        </td>
+        <td>
+          <button class="danger" onclick="deleteItem(${index})">Sil</button>
+        </td>
+      </tr>`;
     }
-
   });
-}
 
+  totalItems.innerText = items.length;
+  totalStock.innerText = totalQty;
+  lowStock.innerText = lowCount;
+}
 </script>
 
 </body>

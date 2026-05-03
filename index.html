@@ -21,7 +21,6 @@ button:hover{filter:brightness(1.12)}
 .danger{background:#e11d48!important}.green{background:#16a34a!important}.orange{background:#f97316!important}.darkbtn{background:#1f2937!important}
 
 .app{width:100vw;min-height:100vh;margin:0;display:grid;grid-template-columns:275px 1fr;background:#070b14;overflow:hidden}
-.titlebar{display:none}
 .layout{display:contents}
 
 .side{height:100vh;background:#0b1120;border-right:1px solid #1e293b;padding:22px 18px;overflow:auto}
@@ -32,8 +31,24 @@ button:hover{filter:brightness(1.12)}
 .side button.active{background:linear-gradient(135deg,rgba(79,70,229,.9),rgba(124,58,237,.9))!important;color:white!important;box-shadow:0 0 20px rgba(124,58,237,.3)}
 
 .content{height:100vh;overflow:auto;padding:88px 26px 24px;position:relative}
-.content::before{content:"";position:fixed;top:0;left:275px;right:0;height:72px;background:rgba(7,11,20,.88);backdrop-filter:blur(14px);border-bottom:1px solid #1e293b;z-index:5}
-.content::after{content:"🔍  Malzeme ara...                                      Ctrl + K";position:fixed;top:16px;left:300px;width:440px;padding:12px 16px;color:#94a3b8;background:#111827;border:1px solid #1e293b;border-radius:12px;z-index:6}
+
+.topbar{
+  position:fixed;
+  top:0;
+  left:275px;
+  right:0;
+  height:72px;
+  background:rgba(7,11,20,.88);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid #1e293b;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 26px;
+}
+.topbar input{max-width:500px}
+.topbar button{margin-left:auto}
 
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
 .card{background:linear-gradient(145deg,#111827,#0b1120);border:1px solid #1e293b;border-radius:16px;padding:22px;box-shadow:0 15px 35px rgba(0,0,0,.25)}
@@ -47,6 +62,8 @@ button:hover{filter:brightness(1.12)}
 
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .grid6{display:grid;grid-template-columns:1.3fr .7fr .7fr 1fr 1fr 1fr auto;gap:10px}
+.shortcut-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.shortcut-grid button{text-align:left;padding:18px;background:#111827;border:1px solid #1e293b}
 
 table{width:100%;border-collapse:collapse}
 th{color:#cbd5e1;font-size:13px;text-align:left;padding:13px;background:#0f172a;border-bottom:1px solid #1e293b}
@@ -60,7 +77,6 @@ tr:hover td{background:rgba(124,58,237,.05)}
 .product-img{width:52px;height:52px;object-fit:cover;border-radius:10px;border:1px solid #334155;background:white}
 
 #notifications p{background:#1e1b4b;border:1px solid #312e81;color:#ddd6fe;padding:14px;border-radius:14px}
-.statusbar{display:none}
 
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;justify-content:center;align-items:center;z-index:99;padding:20px}
 .modal-card{background:#111827;border:1px solid #334155;border-radius:18px;padding:22px;width:440px}
@@ -70,8 +86,8 @@ tr:hover td{background:rgba(124,58,237,.05)}
   .app{grid-template-columns:1fr}
   .side{height:auto;border-right:0;border-bottom:1px solid #1e293b}
   .content{height:auto;padding:20px}
-  .content::before,.content::after{display:none}
-  .cards,.grid,.grid6{grid-template-columns:1fr}
+  .topbar{position:static;height:auto;padding:10px 0;margin-bottom:15px}
+  .cards,.grid,.grid6,.shortcut-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -89,8 +105,6 @@ tr:hover td{background:rgba(124,58,237,.05)}
 </div>
 
 <div class="app hidden" id="app">
-  <div class="titlebar"></div>
-
   <div class="layout">
     <aside class="side">
       <h3>ENVANTER</h3>
@@ -110,6 +124,11 @@ tr:hover td{background:rgba(124,58,237,.05)}
 
     <main class="content">
 
+      <div class="topbar">
+        <input id="globalSearch" placeholder="🔍 Malzeme ara...">
+        <button onclick="goAddMaterial()">+ Malzeme Ekle</button>
+      </div>
+
       <section id="homePage">
         <div class="cards">
           <div class="card"><h3>Toplam Malzeme</h3><p id="totalItems">0</p></div>
@@ -119,13 +138,25 @@ tr:hover td{background:rgba(124,58,237,.05)}
         </div>
 
         <div class="panel">
+          <h2>⚡ Hızlı Kısayollar</h2>
+          <div class="panel-body shortcut-grid">
+            <button onclick="goAddMaterial()">➕ Malzeme Ekle</button>
+            <button onclick="showPage('products')">📦 Malzemeler</button>
+            <button onclick="showPage('orders')">🧾 Siparişler</button>
+            <button onclick="showPage('projects')">🛠️ Projeler</button>
+            <button onclick="showPage('missing')">⚠️ Eksikler</button>
+            <button onclick="showPage('logs')">📜 Geçmiş</button>
+          </div>
+        </div>
+
+        <div class="panel">
           <h2>✨ Yapay Zeka Asistanı</h2>
           <div class="panel-body" id="notifications"></div>
         </div>
       </section>
 
       <section id="productsPage" class="hidden">
-        <div class="panel">
+        <div class="panel" id="addMaterialPanel">
           <h2>Malzeme Ekle</h2>
           <div class="panel-body grid6">
             <input id="name" placeholder="Malzeme adı">
@@ -167,20 +198,6 @@ tr:hover td{background:rgba(124,58,237,.05)}
               <option>Sepette</option><option>Sipariş edildi</option><option>Hazırlanıyor</option><option>Kargoda</option><option>Teslim edildi</option>
             </select>
             <button class="orange" onclick="addExistingOrder()">Sipariş Ekle</button>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Yeni Ürün + Sipariş</h2>
-          <div class="panel-body grid">
-            <input id="newOrderProductName" placeholder="Yeni ürün adı">
-            <input id="newOrderQty" type="number" placeholder="Stok adedi">
-            <input id="newOrderMinQty" type="number" placeholder="Min stok">
-            <select id="newOrderCategory"></select>
-            <input id="newOrderImage" placeholder="Fotoğraf linki">
-            <input id="newOrderLink" placeholder="Sipariş linki">
-            <input id="newOrderNote" placeholder="Not">
-            <button class="green" onclick="addNewProductAndOrder()">Yeni Ürün + Sipariş Ekle</button>
           </div>
         </div>
 
@@ -284,8 +301,6 @@ tr:hover td{background:rgba(124,58,237,.05)}
 
     </main>
   </div>
-
-  <div class="statusbar" id="statusBar">Hazır</div>
 </div>
 
 <div class="modal hidden" id="editModal">
@@ -331,6 +346,11 @@ function login(){
 
 function logout(){app.classList.add("hidden");loginScreen.classList.remove("hidden")}
 
+function goAddMaterial(){
+  showPage("products");
+  setTimeout(()=>document.getElementById("name").focus(),100);
+}
+
 function randomCode(){
   const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code="";
@@ -370,8 +390,19 @@ function showPage(page){
 }
 
 function addItem(){
-  if(name.value.trim()===""||qty.value===""||place.value.trim()===""){alert("Malzeme adı, adet ve reyon gir.");return}
-  items.push({code:randomCode(),name:name.value.trim(),qty:Number(qty.value),minQty:Number(minQty.value||3),place:place.value.trim(),category:categorySelect.value,image:image.value.trim()});
+  if(name.value.trim()===""||qty.value===""||place.value.trim()===""){
+    alert("Malzeme adı, adet ve reyon gir.");
+    return;
+  }
+  items.push({
+    code:randomCode(),
+    name:name.value.trim(),
+    qty:Number(qty.value),
+    minQty:Number(minQty.value||3),
+    place:place.value.trim(),
+    category:categorySelect.value,
+    image:image.value.trim()
+  });
   log("Ürün eklendi: "+name.value.trim());
   name.value="";qty.value="";minQty.value="";place.value="";image.value="";
   saveAll();renderAll();
@@ -415,7 +446,6 @@ function showQR(i){
   qrText.innerText=x.code;
   qrModal.classList.remove("hidden");
 }
-
 function closeQR(){qrModal.classList.add("hidden")}
 
 function renderProducts(){
@@ -435,7 +465,7 @@ function renderProducts(){
         <td><span class="badge info">${x.category||"Diğer"}</span></td>
         <td>${x.place||"-"}</td>
         <td><span class="badge ${x.qty<=min?'low':'ok'}">${x.qty<=min?'Az Kaldı':'Yeterli'}</span></td>
-        <td><button onclick="openEdit(${i})">👁</button><button onclick="showQR(${i})">QR</button><button class="danger" onclick="deleteItem(${i})">Sil</button></td>
+        <td><button onclick="openEdit(${i})">Düzenle</button><button onclick="showQR(${i})">QR</button><button class="danger" onclick="deleteItem(${i})">Sil</button></td>
       </tr>`;
     }
   });
@@ -450,16 +480,6 @@ function addExistingOrder(){
   saveAll();renderAll();
 }
 
-function addNewProductAndOrder(){
-  if(newOrderProductName.value.trim()===""||newOrderQty.value===""){alert("Yeni ürün adı ve stok adedi gir.");return}
-  const product={code:randomCode(),name:newOrderProductName.value.trim(),qty:Number(newOrderQty.value),minQty:Number(newOrderMinQty.value||3),place:"-",category:newOrderCategory.value,image:newOrderImage.value.trim()};
-  items.push(product);
-  orders.push({orderCode:randomCode(),productName:product.name,productCode:product.code,qty:Number(newOrderQty.value),link:newOrderLink.value.trim(),note:newOrderNote.value.trim(),status:"Sepette",received:false});
-  log("Yeni ürün + sipariş eklendi: "+product.name);
-  newOrderProductName.value="";newOrderQty.value="";newOrderMinQty.value="";newOrderImage.value="";newOrderLink.value="";newOrderNote.value="";
-  saveAll();renderAll();
-}
-
 function statusClass(status){
   if(status==="Sepette") return "cart";
   if(status==="Teslim edildi") return "done";
@@ -471,7 +491,7 @@ function updateOrderStatus(i,value){
   orders[i].status=value;
   if(value==="Teslim edildi"&&!orders[i].received){
     const product=items.find(x=>x.code===orders[i].productCode);
-    if(product){product.qty+=Number(orders[i].qty||1);orders[i].received=true;log("Sipariş teslim alındı ve stoğa eklendi: "+product.name)}
+    if(product){product.qty+=Number(orders[i].qty||1);orders[i].received=true;log("Sipariş stoğa eklendi: "+product.name)}
   }
   saveAll();renderAll();
 }
@@ -604,7 +624,7 @@ function deleteCategory(i){
 }
 
 function fillCategorySelects(){
-  [categorySelect,newOrderCategory,editCategory].forEach(sel=>{
+  [categorySelect,editCategory].forEach(sel=>{
     if(!sel) return;
     sel.innerHTML="";
     categories.forEach(c=>sel.innerHTML+=`<option>${c}</option>`);
@@ -628,8 +648,8 @@ function clearLogs(){
 }
 
 function renderHome(){
-  let totalQty=0, low=0;
-  items.forEach(x=>{totalQty+=x.qty;if(x.qty<=(x.minQty??3)) low++});
+  let low=0;
+  items.forEach(x=>{if(x.qty<=(x.minQty??3)) low++});
   totalItems.innerText=items.length;
   lowStock.innerText=low;
   missingCount.innerText=items.filter(x=>x.qty===0).length;
@@ -677,6 +697,12 @@ function importData(e){
   };
   reader.readAsText(file);
 }
+
+globalSearch.addEventListener("input",function(){
+  showPage("products");
+  search.value=globalSearch.value;
+  renderProducts();
+});
 
 function renderAll(){
   fillCategorySelects();

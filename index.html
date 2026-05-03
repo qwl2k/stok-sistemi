@@ -9,171 +9,208 @@
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:"Segoe UI",Tahoma,Arial,sans-serif;
-  background:#0b5ea8;
-  color:#111;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:#09090b;
+  color:#f5f5f5;
 }
 .hidden{display:none!important}
 
-.window{
+.login{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:radial-gradient(circle at top,#2a2105,#09090b 60%);
+}
+
+.login-box,.app{
+  background:#111113;
+  border:1px solid #2f2f2f;
+  box-shadow:0 0 40px rgba(234,179,8,.12);
+}
+
+.login-box{
+  width:380px;
+  border-radius:18px;
+  padding:28px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  margin:6px 0;
+  background:#18181b;
+  color:white;
+  border:1px solid #3f3f46;
+  border-radius:10px;
+  outline:none;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:#eab308;
+  box-shadow:0 0 0 2px rgba(234,179,8,.15);
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:10px 13px;
+  background:#eab308;
+  color:#111;
+  font-weight:700;
+  cursor:pointer;
+  margin:2px;
+}
+
+button:hover{background:#facc15}
+.danger{background:#dc2626!important;color:white!important}
+.green{background:#22c55e!important;color:#052e16!important}
+.orange{background:#f97316!important;color:white!important}
+.darkbtn{background:#27272a!important;color:white!important}
+
+.app{
   max-width:1500px;
   margin:18px auto;
-  background:#dcdcdc;
-  border:2px solid #f5f5f5;
-  box-shadow:0 0 0 2px #555,0 12px 35px rgba(0,0,0,.45);
   min-height:92vh;
+  border-radius:22px;
+  overflow:hidden;
 }
 
 .titlebar{
-  background:linear-gradient(#1d6fb8,#0b4f91);
-  color:white;
-  padding:8px 12px;
+  background:linear-gradient(90deg,#18181b,#292006);
+  border-bottom:1px solid #3f3f46;
+  padding:15px 18px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  font-weight:bold;
 }
 
-.menubar{
-  background:#efefef;
-  border-bottom:1px solid #999;
-  padding:6px 10px;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
+.titlebar span{
+  font-size:20px;
+  font-weight:800;
+  color:#facc15;
 }
-
-.menubar button,.side button,button{
-  font-family:"Segoe UI",Tahoma,Arial,sans-serif;
-  border:1px solid #777;
-  background:linear-gradient(#fff,#d7d7d7);
-  padding:7px 11px;
-  cursor:pointer;
-  color:#111;
-}
-
-button:hover{background:linear-gradient(#eaf4ff,#c8def5)}
-button.active{background:#0b5ea8;color:white}
-.danger{background:#c0392b!important;color:white!important}
-.green{background:#16833a!important;color:white!important}
-.orange{background:#d98200!important;color:white!important}
 
 .layout{
   display:grid;
-  grid-template-columns:220px 1fr;
-  min-height:calc(92vh - 82px);
+  grid-template-columns:230px 1fr;
 }
 
 .side{
-  background:#cfcfcf;
-  border-right:1px solid #888;
-  padding:10px;
+  background:#0f0f11;
+  border-right:1px solid #27272a;
+  padding:15px;
 }
 
 .side h3{
-  margin:8px 0 10px;
+  color:#facc15;
 }
 
 .side button{
   width:100%;
   text-align:left;
-  margin-bottom:6px;
+  margin-bottom:8px;
+  background:#18181b;
+  color:#f5f5f5;
+}
+
+.side button.active{
+  background:#eab308!important;
+  color:#111!important;
 }
 
 .content{
-  padding:14px;
-  overflow:auto;
+  padding:18px;
 }
 
-.panel{
-  background:#f3f3f3;
-  border:1px solid #999;
-  margin-bottom:12px;
+.panel,.card{
+  background:#18181b;
+  border:1px solid #2f2f2f;
+  border-radius:16px;
+  margin-bottom:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
 }
 
 .panel h2{
   margin:0;
-  background:#d8d8d8;
-  border-bottom:1px solid #999;
-  padding:8px 10px;
-  font-size:17px;
+  padding:13px 15px;
+  border-bottom:1px solid #2f2f2f;
+  color:#facc15;
 }
 
-.panel-body{padding:12px}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
+.panel-body{
+  padding:14px;
 }
-
-.grid6{
-  display:grid;
-  grid-template-columns:1.3fr .7fr .7fr 1fr 1fr 1fr auto;
-  gap:8px;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:8px;
-  border:1px solid #777;
-  background:white;
-  font-family:"Segoe UI",Tahoma,Arial,sans-serif;
-}
-
-textarea{resize:vertical}
 
 .cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.card{
+  padding:16px;
+}
+
+.card h3{
+  margin:0;
+  color:#a1a1aa;
+  font-size:14px;
+}
+
+.card p{
+  margin:8px 0 0;
+  color:#facc15;
+  font-size:30px;
+  font-weight:800;
+}
+
+.grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:10px;
 }
 
-.card{
-  background:#f8f8f8;
-  border:1px solid #999;
-  padding:12px;
+.grid6{
+  display:grid;
+  grid-template-columns:1.3fr .7fr .7fr 1fr 1fr 1fr auto;
+  gap:10px;
 }
-
-.card h3{margin:0;font-size:14px;color:#333}
-.card p{font-size:28px;margin:5px 0 0;font-weight:bold;color:#0b5ea8}
 
 table{
   width:100%;
   border-collapse:collapse;
-  background:white;
 }
 
 th{
-  background:#0b5ea8;
-  color:white;
-  padding:8px;
+  background:#27272a;
+  color:#facc15;
+  padding:10px;
   text-align:left;
-  border:1px solid #064678;
 }
 
 td{
-  padding:8px;
-  border:1px solid #bbb;
-  vertical-align:middle;
+  padding:10px;
+  border-bottom:1px solid #2f2f2f;
 }
 
 .badge{
-  padding:4px 8px;
-  border:1px solid #777;
+  padding:5px 9px;
+  border-radius:999px;
   font-weight:bold;
   display:inline-block;
 }
 
-.ok{background:#d9f5d9;color:#116611}
-.low{background:#ffd6d6;color:#9b1111}
-.wait{background:#fff0b8;color:#7a5200}
-.done{background:#d9f5d9;color:#116611}
-.info{background:#d9eaff;color:#004b8d}
+.ok{background:#064e3b;color:#86efac}
+.low{background:#7f1d1d;color:#fecaca}
+.wait{background:#713f12;color:#fde68a}
+.done{background:#14532d;color:#bbf7d0}
+.info{background:#1e293b;color:#bfdbfe}
+.cart{background:#3b2600;color:#facc15}
 
 .code{
+  color:#facc15;
   font-family:Consolas,monospace;
-  color:#004b8d;
   font-weight:bold;
 }
 
@@ -181,74 +218,49 @@ td{
   width:48px;
   height:48px;
   object-fit:cover;
-  border:1px solid #777;
-  background:white;
+  border-radius:10px;
+  border:1px solid #3f3f46;
 }
-
-.statusbar{
-  background:#efefef;
-  border-top:1px solid #999;
-  padding:7px 10px;
-  font-size:13px;
-}
-
-.login{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.login-box{
-  width:360px;
-  background:#dcdcdc;
-  border:2px solid #f5f5f5;
-  box-shadow:0 0 0 2px #555;
-}
-
-.login-box h1{
-  margin:0;
-  background:#0b5ea8;
-  color:white;
-  padding:10px;
-  font-size:20px;
-}
-
-.login-box .inside{padding:15px}
 
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.55);
+  background:rgba(0,0,0,.7);
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:20px;
   z-index:99;
+  padding:20px;
 }
 
 .modal-card{
-  width:420px;
-  background:#dcdcdc;
-  border:2px solid #f5f5f5;
-  box-shadow:0 0 0 2px #555;
-  padding:15px;
+  background:#18181b;
+  border:1px solid #3f3f46;
+  border-radius:18px;
+  padding:20px;
+  width:430px;
 }
 
 .qr{
-  background:white;
   width:190px;
   height:190px;
+  background:white;
   padding:10px;
-  border:1px solid #777;
+  border-radius:12px;
+}
+
+.statusbar{
+  background:#0f0f11;
+  border-top:1px solid #27272a;
+  padding:9px 14px;
+  color:#a1a1aa;
 }
 
 @media(max-width:900px){
-  .window{margin:0;min-height:100vh}
+  .app{margin:0;border-radius:0}
   .layout{grid-template-columns:1fr}
-  .side{border-right:0;border-bottom:1px solid #888}
   .cards,.grid,.grid6{grid-template-columns:1fr}
-  table{font-size:12px}
+  .side{border-right:0;border-bottom:1px solid #27272a}
 }
 </style>
 </head>
@@ -257,28 +269,19 @@ td{
 
 <div class="login" id="loginScreen">
   <div class="login-box">
-    <h1>Depo Stok Sistemi</h1>
-    <div class="inside">
-      <p>Admin girişi</p>
-      <input id="user" placeholder="Kullanıcı adı">
-      <input id="pass" type="password" placeholder="Şifre">
-      <button style="width:100%;margin-top:8px" onclick="login()">Giriş Yap</button>
-      <p id="loginMsg" style="color:red"></p>
-    </div>
+    <h1>🟡 Depo Stok Sistemi</h1>
+    <input id="user" placeholder="Kullanıcı adı">
+    <input id="pass" type="password" placeholder="Şifre">
+    <button style="width:100%" onclick="login()">Giriş Yap</button>
+    <p id="loginMsg" style="color:#f87171"></p>
   </div>
 </div>
 
-<div class="window hidden" id="app">
+<div class="app hidden" id="app">
 
   <div class="titlebar">
-    <span>📦 Depo Stok Sistemi</span>
-    <button class="danger" onclick="logout()">X</button>
-  </div>
-
-  <div class="menubar">
-    <button onclick="exportData()">Yedek Al</button>
-    <button onclick="document.getElementById('importFile').click()">Yedek Yükle</button>
-    <input class="hidden" type="file" id="importFile" accept=".json" onchange="importData(event)">
+    <span>⚡ Depo Stok Yönetim Paneli</span>
+    <button class="danger" onclick="logout()">Çıkış</button>
   </div>
 
   <div class="layout">
@@ -291,6 +294,10 @@ td{
       <button id="btnMissing" onclick="showPage('missing')">⚠️ Eksik Listesi</button>
       <button id="btnCategories" onclick="showPage('categories')">🏷️ Kategoriler</button>
       <button id="btnLogs" onclick="showPage('logs')">📜 Geçmiş</button>
+      <br>
+      <button onclick="exportData()">Yedek Al</button>
+      <button onclick="document.getElementById('importFile').click()">Yedek Yükle</button>
+      <input class="hidden" type="file" id="importFile" accept=".json" onchange="importData(event)">
     </aside>
 
     <main class="content">
@@ -312,16 +319,14 @@ td{
       <section id="productsPage" class="hidden">
         <div class="panel">
           <h2>Ürün Ekle</h2>
-          <div class="panel-body">
-            <div class="grid6">
-              <input id="name" placeholder="Ürün adı">
-              <input id="qty" type="number" placeholder="Adet">
-              <input id="minQty" type="number" placeholder="Min stok">
-              <input id="place" placeholder="Raf / Konum">
-              <select id="categorySelect"></select>
-              <input id="image" placeholder="Fotoğraf linki">
-              <button class="green" onclick="addItem()">Ekle</button>
-            </div>
+          <div class="panel-body grid6">
+            <input id="name" placeholder="Ürün adı">
+            <input id="qty" type="number" placeholder="Adet">
+            <input id="minQty" type="number" placeholder="Min stok">
+            <input id="place" placeholder="Raf / Konum">
+            <select id="categorySelect"></select>
+            <input id="image" placeholder="Fotoğraf linki">
+            <button class="green" onclick="addItem()">Ekle</button>
           </div>
         </div>
 
@@ -351,6 +356,7 @@ td{
             <input id="orderLink" placeholder="Sipariş linki">
             <input id="orderNote" placeholder="Not">
             <select id="orderStatus">
+              <option>Sepette</option>
               <option>Sipariş edildi</option>
               <option>Hazırlanıyor</option>
               <option>Kargoda</option>
@@ -396,7 +402,13 @@ td{
           <h2>Proje Oluştur</h2>
           <div class="panel-body grid">
             <input id="projectName" placeholder="Proje adı">
-            <textarea id="projectNote" placeholder="Proje notu"></textarea>
+            <select id="projectStatus">
+              <option>Planlandı</option>
+              <option>Devam ediyor</option>
+              <option>Beklemede</option>
+              <option>Tamamlandı</option>
+            </select>
+            <textarea id="projectNote" placeholder="Proje açıklaması / notu"></textarea>
             <button class="green" onclick="addProject()">Proje Ekle</button>
           </div>
         </div>
@@ -407,13 +419,27 @@ td{
             <select id="projectSelect"></select>
             <select id="projectProductSelect"></select>
             <input id="projectProductQty" type="number" placeholder="Kullanılacak adet">
+            <select id="projectStockMode">
+              <option value="no">Sadece projeye ekle</option>
+              <option value="yes">Stoktan düş</option>
+            </select>
             <button onclick="addProductToProject()">Projeye Ekle</button>
           </div>
         </div>
 
         <div class="panel">
-          <h2>Projeler</h2>
+          <h2>Proje Listesi</h2>
           <div class="panel-body" id="projectsList"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Proje Geçmişi</h2>
+          <div class="panel-body">
+            <table>
+              <thead><tr><th>Tarih</th><th>Proje</th><th>İşlem</th></tr></thead>
+              <tbody id="projectHistoryList"></tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -435,7 +461,7 @@ td{
         <div class="panel">
           <h2>Kategori Ekle</h2>
           <div class="panel-body grid">
-            <input id="categoryName" placeholder="Kategori adı örn: Arduino, Sensör">
+            <input id="categoryName" placeholder="Kategori adı">
             <button class="green" onclick="addCategory()">Kategori Ekle</button>
           </div>
         </div>
@@ -475,7 +501,7 @@ td{
     <select id="editCategory"></select>
     <input id="editImage" placeholder="Fotoğraf linki">
     <button class="green" onclick="saveEdit()">Kaydet</button>
-    <button onclick="closeEdit()">Kapat</button>
+    <button class="darkbtn" onclick="closeEdit()">Kapat</button>
   </div>
 </div>
 
@@ -484,7 +510,7 @@ td{
     <h2>Ürün QR</h2>
     <img id="qrImg" class="qr">
     <p id="qrText" class="code"></p>
-    <button onclick="closeQR()">Kapat</button>
+    <button class="darkbtn" onclick="closeQR()">Kapat</button>
   </div>
 </div>
 
@@ -494,11 +520,12 @@ let orders = JSON.parse(localStorage.getItem("orders")) || [];
 let projects = JSON.parse(localStorage.getItem("projects")) || [];
 let categories = JSON.parse(localStorage.getItem("categories")) || ["Arduino","Sensör","Kablo","Ekran","Direnç","Diğer"];
 let logs = JSON.parse(localStorage.getItem("logs")) || [];
+let projectHistory = JSON.parse(localStorage.getItem("projectHistory")) || [];
 let editIndex = null;
 
 function login(){
-  const u = document.getElementById("user").value;
-  const p = document.getElementById("pass").value;
+  const u = user.value;
+  const p = pass.value;
 
   if(u === "admin" && p === "1234"){
     loginScreen.classList.add("hidden");
@@ -528,15 +555,23 @@ function saveAll(){
   localStorage.setItem("projects",JSON.stringify(projects));
   localStorage.setItem("categories",JSON.stringify(categories));
   localStorage.setItem("logs",JSON.stringify(logs));
+  localStorage.setItem("projectHistory",JSON.stringify(projectHistory));
 }
 
 function log(text){
-  logs.unshift({
-    time:new Date().toLocaleString("tr-TR"),
-    text:text
-  });
+  logs.unshift({time:new Date().toLocaleString("tr-TR"),text});
   saveAll();
   renderLogs();
+}
+
+function projectLog(project, text){
+  projectHistory.unshift({
+    time:new Date().toLocaleString("tr-TR"),
+    project,
+    text
+  });
+  saveAll();
+  renderProjectHistory();
 }
 
 function showPage(page){
@@ -707,7 +742,7 @@ function addNewProductAndOrder(){
     qty:Number(newOrderQty.value),
     link:newOrderLink.value.trim(),
     note:newOrderNote.value.trim(),
-    status:"Sipariş edildi",
+    status:"Sepette",
     received:false
   });
 
@@ -722,6 +757,13 @@ function addNewProductAndOrder(){
 
   saveAll();
   renderAll();
+}
+
+function statusClass(status){
+  if(status==="Sepette") return "cart";
+  if(status==="Teslim edildi") return "done";
+  if(status==="Kargoda" || status==="Hazırlanıyor") return "wait";
+  return "info";
 }
 
 function updateOrderStatus(i,value){
@@ -765,13 +807,15 @@ function renderOrders(){
         <td>${o.qty || 1}</td>
         <td>
           <select onchange="updateOrderStatus(${i},this.value)">
+            <option ${o.status==="Sepette"?"selected":""}>Sepette</option>
             <option ${o.status==="Sipariş edildi"?"selected":""}>Sipariş edildi</option>
             <option ${o.status==="Hazırlanıyor"?"selected":""}>Hazırlanıyor</option>
             <option ${o.status==="Kargoda"?"selected":""}>Kargoda</option>
             <option ${o.status==="Teslim edildi"?"selected":""}>Teslim edildi</option>
           </select>
+          <span class="badge ${statusClass(o.status)}">${o.status}</span>
         </td>
-        <td>${o.link ? `<a href="${o.link}" target="_blank">Aç</a>` : "-"}</td>
+        <td>${o.link ? `<a style="color:#facc15" href="${o.link}" target="_blank">Aç</a>` : "-"}</td>
         <td>${o.note || "-"}</td>
         <td><button class="danger" onclick="deleteOrder(${i})">Sil</button></td>
       </tr>`;
@@ -781,12 +825,19 @@ function renderOrders(){
 
 function addProject(){
   if(projectName.value.trim()===""){alert("Proje adı gir.");return}
-  projects.push({
+
+  const p = {
+    code:randomCode(),
     name:projectName.value.trim(),
+    status:projectStatus.value,
     note:projectNote.value.trim(),
     products:[]
-  });
-  log("Proje eklendi: " + projectName.value.trim());
+  };
+
+  projects.push(p);
+  log("Proje eklendi: " + p.name);
+  projectLog(p.name,"Proje oluşturuldu. Durum: " + p.status);
+
   projectName.value="";
   projectNote.value="";
   saveAll();
@@ -800,6 +851,17 @@ function addProductToProject(){
   const product = items[projectProductSelect.value];
   const amount = Number(projectProductQty.value || 1);
 
+  if(projectStockMode.value === "yes"){
+    if(product.qty < amount){
+      alert("Stokta yeterli ürün yok.");
+      return;
+    }
+    product.qty -= amount;
+    projectLog(project.name,`${product.name} projeye eklendi ve stoktan ${amount} adet düşüldü.`);
+  }else{
+    projectLog(project.name,`${product.name} projeye eklendi. Stoktan düşülmedi.`);
+  }
+
   project.products.push({
     productName:product.name,
     productCode:product.code,
@@ -812,8 +874,16 @@ function addProductToProject(){
   renderAll();
 }
 
+function updateProjectStatus(i,value){
+  projects[i].status = value;
+  projectLog(projects[i].name,"Proje durumu değişti: " + value);
+  saveAll();
+  renderAll();
+}
+
 function deleteProject(i){
   if(confirm("Proje silinsin mi?")){
+    projectLog(projects[i].name,"Proje silindi.");
     log("Proje silindi: " + projects[i].name);
     projects.splice(i,1);
     saveAll();
@@ -828,13 +898,24 @@ function renderProjects(){
 
   projects.forEach((p,i)=>{
     projectSelect.innerHTML += `<option value="${i}">${p.name}</option>`;
-    let productsHtml = p.products.map(x=>`<li>${x.productName} - ${x.qty} adet</li>`).join("");
+
+    let productsHtml = p.products.map(x=>`
+      <li>${x.productName} - ${x.qty} adet <span class="code">${x.productCode}</span></li>
+    `).join("");
 
     projectsList.innerHTML += `
     <div class="panel">
-      <h2>${p.name}</h2>
+      <h2>${p.name} <span class="code">${p.code || ""}</span></h2>
       <div class="panel-body">
-        <p>${p.note || "-"}</p>
+        <p><b>Durum:</b></p>
+        <select onchange="updateProjectStatus(${i},this.value)">
+          <option ${p.status==="Planlandı"?"selected":""}>Planlandı</option>
+          <option ${p.status==="Devam ediyor"?"selected":""}>Devam ediyor</option>
+          <option ${p.status==="Beklemede"?"selected":""}>Beklemede</option>
+          <option ${p.status==="Tamamlandı"?"selected":""}>Tamamlandı</option>
+        </select>
+        <p><b>Not:</b> ${p.note || "-"}</p>
+        <p><b>Ürünler:</b></p>
         <ul>${productsHtml || "<li>Ürün yok</li>"}</ul>
         <button class="danger" onclick="deleteProject(${i})">Projeyi Sil</button>
       </div>
@@ -843,6 +924,18 @@ function renderProjects(){
 
   items.forEach((x,i)=>{
     projectProductSelect.innerHTML += `<option value="${i}">${x.name} - ${x.code}</option>`;
+  });
+}
+
+function renderProjectHistory(){
+  projectHistoryList.innerHTML = "";
+  projectHistory.forEach(h=>{
+    projectHistoryList.innerHTML += `
+    <tr>
+      <td>${h.time}</td>
+      <td>${h.project}</td>
+      <td>${h.text}</td>
+    </tr>`;
   });
 }
 
@@ -927,10 +1020,12 @@ function renderHome(){
 
   let notes = "";
   if(low>0) notes += `<p><span class="badge low">${low} ürün kritik stokta.</span></p>`;
+  const cartCount = orders.filter(o=>o.status==="Sepette").length;
+  if(cartCount>0) notes += `<p><span class="badge cart">${cartCount} ürün sepette bekliyor.</span></p>`;
   const kargo = orders.filter(o=>o.status==="Kargoda").length;
   if(kargo>0) notes += `<p><span class="badge wait">${kargo} sipariş kargoda.</span></p>`;
-  const teslim = orders.filter(o=>o.status==="Teslim edildi" && !o.received).length;
-  if(teslim>0) notes += `<p><span class="badge done">${teslim} sipariş teslim alınabilir.</span></p>`;
+  const activeProject = projects.filter(p=>p.status==="Devam ediyor").length;
+  if(activeProject>0) notes += `<p><span class="badge info">${activeProject} proje devam ediyor.</span></p>`;
   if(notes==="") notes = `<p><span class="badge ok">Her şey yolunda.</span></p>`;
 
   notifications.innerHTML = notes;
@@ -947,7 +1042,7 @@ function fillProductOptions(){
 }
 
 function exportData(){
-  const data = {items,orders,projects,categories,logs};
+  const data = {items,orders,projects,categories,logs,projectHistory};
   const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -969,6 +1064,7 @@ function importData(e){
       projects = data.projects || [];
       categories = data.categories || categories;
       logs = data.logs || [];
+      projectHistory = data.projectHistory || [];
       saveAll();
       renderAll();
       log("Yedek yüklendi");
@@ -985,6 +1081,7 @@ function renderAll(){
   renderProducts();
   renderOrders();
   renderProjects();
+  renderProjectHistory();
   renderMissing();
   renderCategories();
   renderLogs();

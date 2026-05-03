@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stok Sistemim</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f4f6f8;
+  margin:0;
+}
+
+/* Kart /
+.box{
+  max-width:900px;
+  margin:40px auto;
+  background:white;
+  padding:25px;
+  border-radius:15px;
+}
+
+/ Input /
+input{
+  padding:12px;
+  margin:6px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+/ Buton /
+button{
+  padding:12px;
+  margin:6px;
+  border-radius:8px;
+  border:none;
+  background:black;
+  color:white;
+  cursor:pointer;
+}
+
+/ Tablo /
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid #ddd;
+}
+
+/ Stok az /
+.low{
+  color:red;
+  font-weight:bold;
+}
+
+.hidden{
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="box" id="loginBox">
+  <h2>Admin Girişi</h2>
+  <input id="user" placeholder="Kullanıcı adı">
+  <input id="pass" type="password" placeholder="Şifre">
+  <button onclick="login()">Giriş Yap</button>
+  <p id="loginMsg"></p>
+</div>
+
+<!-- APP -->
+<div class="box hidden" id="app">
+
+  <h1>Stok Durum Sistemi</h1>
+
+  <h3>Ürün Ekle</h3>
+  <input id="name" placeholder="Ürün adı">
+  <input id="qty" type="number" placeholder="Adet">
+  <input id="place" placeholder="Raf / Konum">
+  <button onclick="addItem()">Ekle</button>
+
+  <br>
+
+  <input id="search" placeholder="Ara..." oninput="render()">
+
+  <table>
+    <thead>
+      <tr>
+        <th>Kod</th>
+        <th>Ürün</th>
+        <th>Adet</th>
+        <th>Konum</th>
+        <th>Durum</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="list"></tbody>
+  </table>
+
+</div>
+
+<script>
+
+let items = JSON.parse(localStorage.getItem("stok")) || [];
+
+function login(){
+  if(user.value=="admin" && pass.value=="1234"){
+    loginBox.classList.add("hidden");
+    app.classList.remove("hidden");
+    render();
+  }else{
+    loginMsg.innerText="Hatalı giriş";
+  }
+}
+
+/ RANDOM KOD */
+function randomCode(){
+  const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code="";
+  for(let i=0;i<8;i++){
+    code+=chars[Math.floor(Math.random()chars.length)];
+  }
+  return code;
+}
+
+function save(){
+  localStorage.setItem("stok", JSON.stringify(items));
+}
+
+/ ÜRÜN EKLE /
+function addItem(){
+
+  if(name.value=="" || qty.value=="" || place.value==""){
+    alert("Boş bırakma!");
+    return;
+  }
+
+  items.push({
+    code: randomCode(),
+    name: name.value,
+    qty: Number(qty.value),
+    place: place.value
+  });
+
+  save();
+
+  name.value="";
+  qty.value="";
+  place.value="";
+
+  render();
+}
+
+/ SİL /
+function deleteItem(i){
+  items.splice(i,1);
+  save();
+  render();
+}
+
+/ GÖSTER */
+function render(){
+
+  let searchText = search.value.toLowerCase();
+  list.innerHTML="";
+
+  items.forEach((item,index)=>{
+
+    if(item.name.toLowerCase().includes(searchText) ||
+       item.code.toLowerCase().includes(searchText)){
+
+      list.innerHTML +=        <tr>         <td>${item.code}</td>         <td>${item.name}</td>         <td>${item.qty}</td>         <td>${item.place}</td>         <td class="${item.qty <= 3 ? 'low' : ''}">           ${item.qty <= 3 ? 'Stok az' : 'Yeterli'}         </td>         <td>           <button onclick="deleteItem(${index})">Sil</button>         </td>       </tr>;
+    }
+
+  });
+}
+
+</script>
+
+</body>
+</html>

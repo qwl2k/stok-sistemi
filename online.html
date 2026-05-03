@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>DepoPanel Online</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI";
+  background:#f4f6f8;
+}
+.top{
+  background:#2563eb;
+  color:white;
+  padding:15px;
+  display:flex;
+  gap:10px;
+}
+.top input{padding:8px}
+.container{padding:20px}
+.card{
+  background:white;
+  padding:15px;
+  margin-bottom:10px;
+  border-radius:10px;
+}
+button{
+  padding:8px 12px;
+  border:0;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+}
+.danger{background:#dc2626}
+</style>
+
+</head>
+<body>
+
+<div class="top">
+  <input id="name" placeholder="Ürün adı">
+  <input id="qty" type="number" placeholder="Adet">
+  <input id="place" placeholder="Reyon">
+  <button onclick="addProduct()">Ekle</button>
+</div>
+
+<div class="container" id="list"></div>
+
+<script>
+
+// 🔑 SENİN BİLGİLERİN
+const supabase = window.supabase.createClient(
+  "https://erqpdafnrehlrggauitv.supabase.co",
+  "sb_publishable_UH7PYsqYL_sQlzFWFNAu9g_KgwS4sCu"
+);
+
+// RANDOM KOD
+function code(){
+  return Math.random().toString(36).substring(2,10).toUpperCase()
+}
+
+// ÜRÜN EKLE
+async function addProduct(){
+  await supabase.from("products").insert([{
+    code: code(),
+    name: name.value,
+    quantity: Number(qty.value),
+    shelf: place.value
+  }]);
+
+  name.value=""; qty.value=""; place.value="";
+  load();
+}
+
+// LİSTE
+async function load(){
+  let { data } = await supabase.from("products").select("*").order("created_at",{ascending:false});
+
+  list.innerHTML="";
+  data.forEach(x=>{
+    list.innerHTML += `
+    <div class="card">
+      <b>${x.name}</b> (${x.code})<br>
+      Adet: ${x.quantity}<br>
+      Raf: ${x.shelf}<br><br>
+
+      <button onclick="change('${x.id}',1)">+</button>
+      <button onclick="change('${x.id}',-1)">-</button>
+      <button onclick="qr('${x.code}')">QR</button>
+      <button class="danger" onclick="del('${x.id}')">Sil</button>
+    </div>`;
+  });
+}
+
+// STOK DEĞİŞTİR
+async function change(id,val){
+  let { data } = await supabase.from("products").select("*").eq("id",id).single();
+
+  let newQty = data.quantity + val;
+  if(newQty < 0) newQty = 0;
+
+  await supabase.from("products").update({quantity:newQty}).eq("id",id);
+
+  await supabase.from("stock_movements").insert([{
+    product_code:data.code,
+    product_name:data.name,
+    change_amount:val
+  }]);
+
+  load();
+}
+
+// SİL
+async function del(id){
+  await supabase.from("products").delete().eq("id",id);
+  load();
+}
+
+// QR
+function qr(text){
+  window.open("https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+text)
+}
+
+load();
+
+</script>
+
+</body>
+</html>

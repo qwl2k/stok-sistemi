@@ -3,385 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stok Sistemi</title>
+<title>Depo Stok Sistemi</title>
 
 <style>
 *{box-sizing:border-box}
-
 body{
   margin:0;
-  font-family:"Segoe UI",Arial,sans-serif;
-  background:#0078d7;
-  color:#1f2937;
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+  background:#0b5ea8;
+  color:#111;
 }
-
-body.light{
-  background:#e5e5e5;
-  color:#111827;
-}
-
 .hidden{display:none!important}
 
-.login{
-  min-height:100vh;
+.window{
+  max-width:1500px;
+  margin:18px auto;
+  background:#dcdcdc;
+  border:2px solid #f5f5f5;
+  box-shadow:0 0 0 2px #555,0 12px 35px rgba(0,0,0,.45);
+  min-height:92vh;
+}
+
+.titlebar{
+  background:linear-gradient(#1d6fb8,#0b4f91);
+  color:white;
+  padding:8px 12px;
   display:flex;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
-  padding:20px;
-  background:linear-gradient(135deg,#0078d7,#005a9e);
+  font-weight:bold;
 }
 
-.login-card,.panel,.card,.side{
-  background:#f3f3f3;
-  border:1px solid #c8c8c8;
-  border-radius:2px;
-  box-shadow:0 8px 24px rgba(0,0,0,.25);
+.menubar{
+  background:#efefef;
+  border-bottom:1px solid #999;
+  padding:6px 10px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
 }
 
-body:not(.light) .login-card,
-body:not(.light) .panel,
-body:not(.light) .card,
-body:not(.light) .side{
-  background:#1f1f1f;
-  border:1px solid #3a3a3a;
-  color:#f3f3f3;
-}
-
-.login-card{
-  width:380px;
-  padding:30px;
-  text-align:center;
-}
-
-input,select{
-  width:100%;
-  padding:12px;
-  margin:7px 0;
-  background:white;
-  color:#111827;
-  border:1px solid #a6a6a6;
-  border-radius:2px;
-  outline:none;
-}
-
-body:not(.light) input,
-body:not(.light) select{
-  background:#2b2b2b;
-  color:white;
-  border:1px solid #555;
-}
-
-input:focus,select:focus{
-  border-color:#0078d7;
-  box-shadow:0 0 0 2px rgba(0,120,215,.25);
-}
-
-button{
-  border:1px solid #005a9e;
-  border-radius:2px;
-  padding:10px 14px;
-  background:#0078d7;
-  color:white;
+.menubar button,.side button,button{
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+  border:1px solid #777;
+  background:linear-gradient(#fff,#d7d7d7);
+  padding:7px 11px;
   cursor:pointer;
-  font-weight:600;
-  font-family:"Segoe UI",Arial,sans-serif;
+  color:#111;
 }
 
-button:hover{
-  background:#106ebe;
-}
+button:hover{background:linear-gradient(#eaf4ff,#c8def5)}
+button.active{background:#0b5ea8;color:white}
+.danger{background:#c0392b!important;color:white!important}
+.green{background:#16833a!important;color:white!important}
+.orange{background:#d98200!important;color:white!important}
 
-.danger{
-  background:#c42b1c;
-  border-color:#a4262c;
-}
-
-.danger:hover{
-  background:#a4262c;
-}
-
-.green{
-  background:#107c10;
-  border-color:#0b6a0b;
-}
-
-.green:hover{
-  background:#0b6a0b;
-}
-
-.orange{
-  background:#d83b01;
-  border-color:#a74109;
-}
-
-.gray{
-  background:#5f6a72;
-  border-color:#4b5563;
-}
-
-.app{
+.layout{
   display:grid;
-  grid-template-columns:1fr 240px;
-  gap:18px;
-  max-width:1450px;
-  margin:22px auto;
-  padding:15px;
+  grid-template-columns:220px 1fr;
+  min-height:calc(92vh - 82px);
 }
 
 .side{
-  padding:14px;
-  height:max-content;
-  position:sticky;
-  top:20px;
+  background:#cfcfcf;
+  border-right:1px solid #888;
+  padding:10px;
 }
 
-.side h2{
-  margin-top:0;
-  font-size:20px;
+.side h3{
+  margin:8px 0 10px;
 }
 
 .side button{
   width:100%;
-  margin:6px 0;
-  background:transparent;
-  color:inherit;
-  border:1px solid transparent;
   text-align:left;
+  margin-bottom:6px;
 }
 
-.side button:hover{
-  background:rgba(0,120,215,.15);
-  border-color:#0078d7;
-}
-
-.side button.active{
-  background:#0078d7!important;
-  color:white!important;
-  border-color:#005a9e!important;
-}
-
-.topbar{
-  background:#f3f3f3;
-  border:1px solid #c8c8c8;
-  border-radius:2px;
-  padding:18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:18px;
-  box-shadow:0 4px 14px rgba(0,0,0,.15);
-}
-
-body:not(.light) .topbar{
-  background:#1f1f1f;
-  border:1px solid #3a3a3a;
-  color:white;
-}
-
-.topbar h1{
-  margin:0;
-  font-weight:600;
-}
-
-.topbar p{
-  margin:5px 0 0;
-  color:#6b7280;
-}
-
-body:not(.light) .topbar p{
-  color:#c8c8c8;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin-bottom:18px;
-}
-
-.card{
-  padding:18px;
-  border-left:5px solid #0078d7;
-}
-
-.card h3{
-  margin:0;
-  color:#6b7280;
-  font-size:14px;
-  font-weight:600;
-}
-
-body:not(.light) .card h3{
-  color:#c8c8c8;
-}
-
-.card p{
-  font-size:32px;
-  font-weight:600;
-  margin:8px 0 0;
-  color:#0078d7;
+.content{
+  padding:14px;
+  overflow:auto;
 }
 
 .panel{
-  padding:20px;
-  margin-bottom:18px;
+  background:#f3f3f3;
+  border:1px solid #999;
+  margin-bottom:12px;
 }
 
 .panel h2{
-  margin-top:0;
-  font-weight:600;
-  border-bottom:1px solid #c8c8c8;
-  padding-bottom:10px;
+  margin:0;
+  background:#d8d8d8;
+  border-bottom:1px solid #999;
+  padding:8px 10px;
+  font-size:17px;
 }
 
-body:not(.light) .panel h2{
-  border-bottom:1px solid #3a3a3a;
-}
+.panel-body{padding:12px}
 
-.form{
+.grid{
   display:grid;
-  grid-template-columns:1.4fr .8fr .8fr 1fr 1.3fr auto;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.grid6{
+  display:grid;
+  grid-template-columns:1.3fr .7fr .7fr 1fr 1fr 1fr auto;
+  gap:8px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:8px;
+  border:1px solid #777;
+  background:white;
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+}
+
+textarea{resize:vertical}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
   gap:10px;
 }
 
-.order-form{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr 1fr;
-  gap:10px;
+.card{
+  background:#f8f8f8;
+  border:1px solid #999;
+  padding:12px;
 }
 
-.full{
-  grid-column:1/-1;
-}
+.card h3{margin:0;font-size:14px;color:#333}
+.card p{font-size:28px;margin:5px 0 0;font-weight:bold;color:#0b5ea8}
 
 table{
   width:100%;
   border-collapse:collapse;
-  background:transparent;
-}
-
-th,td{
-  padding:12px;
-  border-bottom:1px solid #d1d5db;
-  text-align:left;
-  vertical-align:middle;
-}
-
-body:not(.light) th,
-body:not(.light) td{
-  border-bottom:1px solid #3a3a3a;
+  background:white;
 }
 
 th{
+  background:#0b5ea8;
   color:white;
-  background:#0078d7;
-  font-weight:600;
+  padding:8px;
+  text-align:left;
+  border:1px solid #064678;
+}
+
+td{
+  padding:8px;
+  border:1px solid #bbb;
+  vertical-align:middle;
 }
 
 .badge{
-  padding:5px 9px;
-  border-radius:2px;
-  font-size:13px;
-  font-weight:600;
+  padding:4px 8px;
+  border:1px solid #777;
+  font-weight:bold;
+  display:inline-block;
 }
 
-.ok{
-  background:#dff6dd;
-  color:#107c10;
-  border:1px solid #107c10;
-}
-
-.low{
-  background:#fde7e9;
-  color:#a4262c;
-  border:1px solid #a4262c;
-}
-
-.wait{
-  background:#fff4ce;
-  color:#8a6d00;
-  border:1px solid #c19c00;
-}
-
-.done{
-  background:#dff6dd;
-  color:#107c10;
-  border:1px solid #107c10;
-}
+.ok{background:#d9f5d9;color:#116611}
+.low{background:#ffd6d6;color:#9b1111}
+.wait{background:#fff0b8;color:#7a5200}
+.done{background:#d9f5d9;color:#116611}
+.info{background:#d9eaff;color:#004b8d}
 
 .code{
   font-family:Consolas,monospace;
-  color:#0078d7;
+  color:#004b8d;
   font-weight:bold;
 }
 
 .product-img{
-  width:52px;
-  height:52px;
+  width:48px;
+  height:48px;
   object-fit:cover;
-  border-radius:2px;
-  border:1px solid #a6a6a6;
+  border:1px solid #777;
   background:white;
 }
 
-.small{
-  font-size:12px;
-  color:#6b7280;
+.statusbar{
+  background:#efefef;
+  border-top:1px solid #999;
+  padding:7px 10px;
+  font-size:13px;
 }
 
-body:not(.light) .small{
-  color:#c8c8c8;
+.login{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
+
+.login-box{
+  width:360px;
+  background:#dcdcdc;
+  border:2px solid #f5f5f5;
+  box-shadow:0 0 0 2px #555;
+}
+
+.login-box h1{
+  margin:0;
+  background:#0b5ea8;
+  color:white;
+  padding:10px;
+  font-size:20px;
+}
+
+.login-box .inside{padding:15px}
 
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.65);
+  background:rgba(0,0,0,.55);
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   padding:20px;
   z-index:99;
 }
 
 .modal-card{
-  background:#f3f3f3;
-  border:1px solid #c8c8c8;
-  border-radius:2px;
-  padding:25px;
-  max-width:430px;
-  width:100%;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-}
-
-body:not(.light) .modal-card{
-  background:#1f1f1f;
-  color:white;
-  border:1px solid #3a3a3a;
+  width:420px;
+  background:#dcdcdc;
+  border:2px solid #f5f5f5;
+  box-shadow:0 0 0 2px #555;
+  padding:15px;
 }
 
 .qr{
   background:white;
-  padding:15px;
-  border-radius:2px;
   width:190px;
   height:190px;
-}
-
-hr{
-  border:0;
-  border-top:1px solid #c8c8c8;
-}
-
-body:not(.light) hr{
-  border-top:1px solid #3a3a3a;
+  padding:10px;
+  border:1px solid #777;
 }
 
 @media(max-width:900px){
-  .app{grid-template-columns:1fr}
-  .side{position:static}
-  .cards{grid-template-columns:1fr}
-  .form,.order-form{grid-template-columns:1fr}
+  .window{margin:0;min-height:100vh}
+  .layout{grid-template-columns:1fr}
+  .side{border-right:0;border-bottom:1px solid #888}
+  .cards,.grid,.grid6{grid-template-columns:1fr}
   table{font-size:12px}
 }
 </style>
@@ -389,120 +255,214 @@ body:not(.light) hr{
 
 <body>
 
-<div class="login" id="loginBox">
-  <div class="login-card">
-    <h1>Admin Girişi</h1>
-    <input id="user" placeholder="Kullanıcı adı">
-    <input id="pass" type="password" placeholder="Şifre">
-    <button style="width:100%" onclick="login()">Giriş Yap</button>
-    <p id="loginMsg" style="color:#f87171"></p>
+<div class="login" id="loginScreen">
+  <div class="login-box">
+    <h1>Depo Stok Sistemi</h1>
+    <div class="inside">
+      <p>Admin girişi</p>
+      <input id="user" placeholder="Kullanıcı adı">
+      <input id="pass" type="password" placeholder="Şifre">
+      <button style="width:100%;margin-top:8px" onclick="login()">Giriş Yap</button>
+      <p id="loginMsg" style="color:red"></p>
+    </div>
   </div>
 </div>
 
-<div class="app hidden" id="app">
-<main>
-  <div class="topbar">
-    <div>
-      <h1>📦 Stok Yönetim Sistemi</h1>
-      <p>Ürün, stok, QR ve sipariş takibi</p>
-    </div>
-    <button class="danger" onclick="logout()">Çıkış</button>
+<div class="window hidden" id="app">
+
+  <div class="titlebar">
+    <span>📦 Depo Stok Sistemi</span>
+    <button class="danger" onclick="logout()">X</button>
   </div>
 
-  <section id="productsPage">
-    <div class="cards">
-      <div class="card"><h3>Toplam Ürün</h3><p id="totalItems">0</p></div>
-      <div class="card"><h3>Toplam Stok</h3><p id="totalStock">0</p></div>
-      <div class="card"><h3>Kritik Stok</h3><p id="lowStock">0</p></div>
-    </div>
+  <div class="menubar">
+    <button onclick="exportData()">Yedek Al</button>
+    <button onclick="document.getElementById('importFile').click()">Yedek Yükle</button>
+    <input class="hidden" type="file" id="importFile" accept=".json" onchange="importData(event)">
+  </div>
 
-    <div class="panel">
-      <h2>Ürün Ekle</h2>
-      <div class="form">
-        <input id="name" placeholder="Ürün adı">
-        <input id="qty" type="number" placeholder="Adet">
-        <input id="minQty" type="number" placeholder="Min. stok">
-        <input id="place" placeholder="Raf / Konum">
-        <input id="image" placeholder="Fotoğraf linki">
-        <button class="green" onclick="addItem()">Ekle</button>
-      </div>
+  <div class="layout">
+    <aside class="side">
+      <h3>Menü</h3>
+      <button class="active" id="btnHome" onclick="showPage('home')">🏠 Ana Sayfa</button>
+      <button id="btnProducts" onclick="showPage('products')">📦 Ürünler</button>
+      <button id="btnOrders" onclick="showPage('orders')">🧾 Siparişler</button>
+      <button id="btnProjects" onclick="showPage('projects')">🛠️ Projeler</button>
+      <button id="btnMissing" onclick="showPage('missing')">⚠️ Eksik Listesi</button>
+      <button id="btnCategories" onclick="showPage('categories')">🏷️ Kategoriler</button>
+      <button id="btnLogs" onclick="showPage('logs')">📜 Geçmiş</button>
+    </aside>
 
-      <h3>Ürün Arama</h3>
-      <input id="search" placeholder="Kod, ürün adı veya konum ara..." oninput="renderProducts()">
-    </div>
+    <main class="content">
 
-    <div class="panel">
-      <h2>Ürün Listesi</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Foto</th><th>Kod</th><th>Ürün</th><th>Adet</th><th>Min</th><th>Konum</th><th>Durum</th><th>İşlem</th>
-          </tr>
-        </thead>
-        <tbody id="list"></tbody>
-      </table>
-    </div>
-  </section>
+      <section id="homePage">
+        <div class="cards">
+          <div class="card"><h3>Toplam Ürün</h3><p id="totalItems">0</p></div>
+          <div class="card"><h3>Toplam Stok</h3><p id="totalStock">0</p></div>
+          <div class="card"><h3>Kritik Stok</h3><p id="lowStock">0</p></div>
+          <div class="card"><h3>Aktif Sipariş</h3><p id="activeOrders">0</p></div>
+        </div>
 
-  <section id="ordersPage" class="hidden">
-    <div class="panel">
-      <h2>🧾 Kayıtlı Üründen Sipariş Ekle</h2>
-      <div class="order-form">
-        <select id="orderProduct"></select>
-        <input id="orderLink" placeholder="Sipariş linki">
-        <input id="orderNote" placeholder="Not">
-        <select id="orderStatus">
-          <option>Sipariş edildi</option>
-          <option>Hazırlanıyor</option>
-          <option>Kargoda</option>
-          <option>Teslim edildi</option>
-        </select>
-        <button class="orange full" onclick="addExistingOrder()">Sipariş Ekle</button>
-      </div>
-    </div>
+        <div class="panel">
+          <h2>Bildirimler</h2>
+          <div class="panel-body" id="notifications"></div>
+        </div>
+      </section>
 
-    <div class="panel">
-      <h2>➕ Yeni Ürün + Sipariş Ekle</h2>
-      <p class="small">Buradan eklenen ürün stoğa da kaydolur. Raf/konum yok.</p>
-      <div class="order-form">
-        <input id="newOrderProductName" placeholder="Yeni ürün adı">
-        <input id="newOrderQty" type="number" placeholder="Stok adedi">
-        <input id="newOrderMinQty" type="number" placeholder="Min. stok">
-        <input id="newOrderImage" placeholder="Fotoğraf linki">
-        <input id="newOrderLink" placeholder="Sipariş linki">
-        <input id="newOrderNote" placeholder="Not">
-        <select id="newOrderStatus">
-          <option>Sipariş edildi</option>
-          <option>Hazırlanıyor</option>
-          <option>Kargoda</option>
-          <option>Teslim edildi</option>
-        </select>
-        <button class="green" onclick="addNewProductAndOrder()">Yeni Ürün + Sipariş Ekle</button>
-      </div>
-    </div>
+      <section id="productsPage" class="hidden">
+        <div class="panel">
+          <h2>Ürün Ekle</h2>
+          <div class="panel-body">
+            <div class="grid6">
+              <input id="name" placeholder="Ürün adı">
+              <input id="qty" type="number" placeholder="Adet">
+              <input id="minQty" type="number" placeholder="Min stok">
+              <input id="place" placeholder="Raf / Konum">
+              <select id="categorySelect"></select>
+              <input id="image" placeholder="Fotoğraf linki">
+              <button class="green" onclick="addItem()">Ekle</button>
+            </div>
+          </div>
+        </div>
 
-    <div class="panel">
-      <h2>Siparişler</h2>
-      <input id="orderSearch" placeholder="Sipariş kodu, ürün adı veya ürün kodu ara..." oninput="renderOrders()">
-      <table>
-        <thead>
-          <tr>
-            <th>Sipariş Kodu</th><th>Ürün</th><th>Ürün Kodu</th><th>Durum</th><th>Link</th><th>Not</th><th>İşlem</th>
-          </tr>
-        </thead>
-        <tbody id="ordersList"></tbody>
-      </table>
-    </div>
-  </section>
-</main>
+        <div class="panel">
+          <h2>Ürün Listesi</h2>
+          <div class="panel-body">
+            <input id="search" placeholder="Ürün, kod, kategori veya konum ara..." oninput="renderProducts()">
+            <br><br>
+            <table>
+              <thead>
+                <tr>
+                  <th>Foto</th><th>Kod</th><th>Ürün</th><th>Adet</th><th>Min</th><th>Kategori</th><th>Konum</th><th>Durum</th><th>İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="list"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
-<aside class="side">
-  <h2>Menü</h2>
-  <button id="btnProducts" class="active" onclick="showPage('products')">📦 Ürünler</button>
-  <button id="btnOrders" onclick="showPage('orders')">🧾 Siparişler</button>
-  <hr>
-  <button onclick="toggleTheme()" id="themeBtn">☀️ Beyaz Tema</button>
-</aside>
+      <section id="ordersPage" class="hidden">
+        <div class="panel">
+          <h2>Kayıtlı Üründen Sipariş</h2>
+          <div class="panel-body grid">
+            <select id="orderProduct"></select>
+            <input id="orderQty" type="number" placeholder="Sipariş adedi">
+            <input id="orderLink" placeholder="Sipariş linki">
+            <input id="orderNote" placeholder="Not">
+            <select id="orderStatus">
+              <option>Sipariş edildi</option>
+              <option>Hazırlanıyor</option>
+              <option>Kargoda</option>
+              <option>Teslim edildi</option>
+            </select>
+            <button class="orange" onclick="addExistingOrder()">Sipariş Ekle</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Yeni Ürün + Sipariş</h2>
+          <div class="panel-body grid">
+            <input id="newOrderProductName" placeholder="Yeni ürün adı">
+            <input id="newOrderQty" type="number" placeholder="Stok adedi">
+            <input id="newOrderMinQty" type="number" placeholder="Min stok">
+            <select id="newOrderCategory"></select>
+            <input id="newOrderImage" placeholder="Fotoğraf linki">
+            <input id="newOrderLink" placeholder="Sipariş linki">
+            <input id="newOrderNote" placeholder="Not">
+            <button class="green" onclick="addNewProductAndOrder()">Yeni Ürün + Sipariş Ekle</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Siparişler</h2>
+          <div class="panel-body">
+            <input id="orderSearch" placeholder="Sipariş veya ürün ara..." oninput="renderOrders()">
+            <br><br>
+            <table>
+              <thead>
+                <tr>
+                  <th>Sipariş Kodu</th><th>Ürün</th><th>Ürün Kodu</th><th>Adet</th><th>Durum</th><th>Link</th><th>Not</th><th>İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="ordersList"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="projectsPage" class="hidden">
+        <div class="panel">
+          <h2>Proje Oluştur</h2>
+          <div class="panel-body grid">
+            <input id="projectName" placeholder="Proje adı">
+            <textarea id="projectNote" placeholder="Proje notu"></textarea>
+            <button class="green" onclick="addProject()">Proje Ekle</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Projeye Ürün Ekle</h2>
+          <div class="panel-body grid">
+            <select id="projectSelect"></select>
+            <select id="projectProductSelect"></select>
+            <input id="projectProductQty" type="number" placeholder="Kullanılacak adet">
+            <button onclick="addProductToProject()">Projeye Ekle</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Projeler</h2>
+          <div class="panel-body" id="projectsList"></div>
+        </div>
+      </section>
+
+      <section id="missingPage" class="hidden">
+        <div class="panel">
+          <h2>Eksik / Alınacaklar Listesi</h2>
+          <div class="panel-body">
+            <table>
+              <thead>
+                <tr><th>Ürün</th><th>Kod</th><th>Mevcut</th><th>Min</th><th>Alınması Gereken</th></tr>
+              </thead>
+              <tbody id="missingList"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="categoriesPage" class="hidden">
+        <div class="panel">
+          <h2>Kategori Ekle</h2>
+          <div class="panel-body grid">
+            <input id="categoryName" placeholder="Kategori adı örn: Arduino, Sensör">
+            <button class="green" onclick="addCategory()">Kategori Ekle</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Kategoriler</h2>
+          <div class="panel-body" id="categoryList"></div>
+        </div>
+      </section>
+
+      <section id="logsPage" class="hidden">
+        <div class="panel">
+          <h2>Hareket Geçmişi</h2>
+          <div class="panel-body">
+            <button class="danger" onclick="clearLogs()">Geçmişi Temizle</button>
+            <br><br>
+            <table>
+              <thead><tr><th>Tarih</th><th>İşlem</th></tr></thead>
+              <tbody id="logsList"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="statusbar" id="statusBar">Hazır</div>
 </div>
 
 <div class="modal hidden" id="editModal">
@@ -510,11 +470,12 @@ body:not(.light) hr{
     <h2>Ürün Düzenle</h2>
     <input id="editName" placeholder="Ürün adı">
     <input id="editQty" type="number" placeholder="Adet">
-    <input id="editMinQty" type="number" placeholder="Min. stok">
+    <input id="editMinQty" type="number" placeholder="Min stok">
     <input id="editPlace" placeholder="Raf / Konum">
+    <select id="editCategory"></select>
     <input id="editImage" placeholder="Fotoğraf linki">
     <button class="green" onclick="saveEdit()">Kaydet</button>
-    <button class="gray" onclick="closeEdit()">Kapat</button>
+    <button onclick="closeEdit()">Kapat</button>
   </div>
 </div>
 
@@ -523,223 +484,234 @@ body:not(.light) hr{
     <h2>Ürün QR</h2>
     <img id="qrImg" class="qr">
     <p id="qrText" class="code"></p>
-    <button class="gray" onclick="closeQR()">Kapat</button>
+    <button onclick="closeQR()">Kapat</button>
   </div>
 </div>
 
 <script>
 let items = JSON.parse(localStorage.getItem("stok")) || [];
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let projects = JSON.parse(localStorage.getItem("projects")) || [];
+let categories = JSON.parse(localStorage.getItem("categories")) || ["Arduino","Sensör","Kablo","Ekran","Direnç","Diğer"];
+let logs = JSON.parse(localStorage.getItem("logs")) || [];
 let editIndex = null;
 
-let theme = localStorage.getItem("theme") || "dark";
-if(theme==="light") document.body.classList.add("light");
-
 function login(){
-  const u=document.getElementById("user").value;
-  const p=document.getElementById("pass").value;
-  if(u==="admin" && p==="1234"){
-    loginBox.classList.add("hidden");
+  const u = document.getElementById("user").value;
+  const p = document.getElementById("pass").value;
+
+  if(u === "admin" && p === "1234"){
+    loginScreen.classList.add("hidden");
     app.classList.remove("hidden");
-    renderProducts();renderOrders();fillProductOptions();updateThemeButton();
-  }else loginMsg.innerText="Hatalı kullanıcı adı veya şifre";
-}
-
-function logout(){app.classList.add("hidden");loginBox.classList.remove("hidden")}
-
-function toggleTheme(){
-  document.body.classList.toggle("light");
-  localStorage.setItem("theme",document.body.classList.contains("light")?"light":"dark");
-  updateThemeButton();
-}
-
-function updateThemeButton(){
-  if(document.getElementById("themeBtn")){
-    themeBtn.innerText=document.body.classList.contains("light")?"🌙 Siyah Tema":"☀️ Beyaz Tema";
-  }
-}
-
-function showPage(page){
-  productsPage.classList.add("hidden");
-  ordersPage.classList.add("hidden");
-  btnProducts.classList.remove("active");
-  btnOrders.classList.remove("active");
-  if(page==="products"){
-    productsPage.classList.remove("hidden");
-    btnProducts.classList.add("active");
+    renderAll();
+    log("Admin giriş yaptı");
   }else{
-    ordersPage.classList.remove("hidden");
-    btnOrders.classList.add("active");
-    fillProductOptions();
+    loginMsg.innerText = "Hatalı kullanıcı adı veya şifre";
   }
+}
+
+function logout(){
+  app.classList.add("hidden");
+  loginScreen.classList.remove("hidden");
 }
 
 function randomCode(){
-  const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let code="";
-  for(let i=0;i<8;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
+  for(let i=0;i<8;i++) code += chars[Math.floor(Math.random()*chars.length)];
   return code;
 }
 
-function saveProducts(){localStorage.setItem("stok",JSON.stringify(items))}
-function saveOrders(){localStorage.setItem("orders",JSON.stringify(orders))}
+function saveAll(){
+  localStorage.setItem("stok",JSON.stringify(items));
+  localStorage.setItem("orders",JSON.stringify(orders));
+  localStorage.setItem("projects",JSON.stringify(projects));
+  localStorage.setItem("categories",JSON.stringify(categories));
+  localStorage.setItem("logs",JSON.stringify(logs));
+}
+
+function log(text){
+  logs.unshift({
+    time:new Date().toLocaleString("tr-TR"),
+    text:text
+  });
+  saveAll();
+  renderLogs();
+}
+
+function showPage(page){
+  ["home","products","orders","projects","missing","categories","logs"].forEach(p=>{
+    document.getElementById(p+"Page")?.classList.add("hidden");
+    document.getElementById("btn"+p.charAt(0).toUpperCase()+p.slice(1))?.classList.remove("active");
+  });
+
+  document.getElementById(page+"Page").classList.remove("hidden");
+  document.getElementById("btn"+page.charAt(0).toUpperCase()+page.slice(1)).classList.add("active");
+  renderAll();
+}
 
 function addItem(){
-  if(name.value.trim()===""||qty.value===""||place.value.trim()===""){
-    alert("Ürün adı, adet ve konum boş kalamaz.");return;
+  if(name.value.trim()==="" || qty.value==="" || place.value.trim()===""){
+    alert("Ürün adı, adet ve konum gir.");
+    return;
   }
+
   items.push({
     code:randomCode(),
     name:name.value.trim(),
     qty:Number(qty.value),
     minQty:Number(minQty.value || 3),
     place:place.value.trim(),
+    category:categorySelect.value,
     image:image.value.trim()
   });
-  saveProducts();
-  name.value="";qty.value="";minQty.value="";place.value="";image.value="";
-  renderProducts();fillProductOptions();
+
+  log("Ürün eklendi: " + name.value.trim());
+  name.value=""; qty.value=""; minQty.value=""; place.value=""; image.value="";
+  saveAll();
+  renderAll();
 }
 
-function deleteItem(index){
-  if(confirm("Bu ürünü silmek istiyor musun?")){
-    items.splice(index,1);saveProducts();renderProducts();fillProductOptions();
+function deleteItem(i){
+  if(confirm("Ürün silinsin mi?")){
+    log("Ürün silindi: " + items[i].name);
+    items.splice(i,1);
+    saveAll();
+    renderAll();
   }
 }
 
-function changeStock(index,amount){
-  items[index].qty += amount;
-  if(items[index].qty < 0) items[index].qty = 0;
-  saveProducts();renderProducts();
+function changeStock(i,amount){
+  items[i].qty += amount;
+  if(items[i].qty < 0) items[i].qty = 0;
+  log(items[i].name + " stok değişti: " + amount);
+  saveAll();
+  renderAll();
 }
 
-function openEdit(index){
-  editIndex=index;
-  const item=items[index];
-  editName.value=item.name;
-  editQty.value=item.qty;
-  editMinQty.value=item.minQty ?? 3;
-  editPlace.value=item.place || "";
-  editImage.value=item.image || "";
+function openEdit(i){
+  editIndex = i;
+  const x = items[i];
+  editName.value = x.name;
+  editQty.value = x.qty;
+  editMinQty.value = x.minQty;
+  editPlace.value = x.place || "";
+  editImage.value = x.image || "";
+  fillCategorySelects();
+  editCategory.value = x.category || "Diğer";
   editModal.classList.remove("hidden");
 }
 
 function saveEdit(){
-  if(editIndex===null) return;
-  items[editIndex].name=editName.value.trim();
-  items[editIndex].qty=Number(editQty.value);
-  items[editIndex].minQty=Number(editMinQty.value || 3);
-  items[editIndex].place=editPlace.value.trim();
-  items[editIndex].image=editImage.value.trim();
-  saveProducts();renderProducts();fillProductOptions();closeEdit();
+  const x = items[editIndex];
+  x.name = editName.value.trim();
+  x.qty = Number(editQty.value);
+  x.minQty = Number(editMinQty.value || 3);
+  x.place = editPlace.value.trim();
+  x.category = editCategory.value;
+  x.image = editImage.value.trim();
+  log("Ürün düzenlendi: " + x.name);
+  saveAll();
+  closeEdit();
+  renderAll();
 }
 
-function closeEdit(){editModal.classList.add("hidden");editIndex=null}
+function closeEdit(){
+  editModal.classList.add("hidden");
+  editIndex = null;
+}
 
-function showQR(index){
-  const item=items[index];
-  const text=`Kod: ${item.code} | Ürün: ${item.name} | Stok: ${item.qty}`;
-  qrImg.src=`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(text)}`;
-  qrText.innerText=item.code;
+function showQR(i){
+  const x = items[i];
+  const text = `Kod:${x.code} Ürün:${x.name} Stok:${x.qty}`;
+  qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(text);
+  qrText.innerText = x.code;
   qrModal.classList.remove("hidden");
 }
+
 function closeQR(){qrModal.classList.add("hidden")}
 
 function renderProducts(){
-  list.innerHTML="";
-  const searchText=search.value.toLowerCase();
-  let totalQty=0, lowCount=0;
+  list.innerHTML = "";
+  const s = (search?.value || "").toLowerCase();
 
-  items.forEach((item,index)=>{
-    const min=item.minQty ?? 3;
-    totalQty+=item.qty;
-    if(item.qty<=min) lowCount++;
+  items.forEach((x,i)=>{
+    const min = x.minQty ?? 3;
+    const searchable = `${x.name} ${x.code} ${x.place || ""} ${x.category || ""}`.toLowerCase();
 
-    const searchable=(item.name+" "+item.code+" "+(item.place||"")).toLowerCase();
-    if(searchable.includes(searchText)){
-      list.innerHTML+=`
+    if(searchable.includes(s)){
+      list.innerHTML += `
       <tr>
-        <td><img class="product-img" src="${item.image || 'https://via.placeholder.com/60'}"></td>
-        <td class="code">${item.code}</td>
-        <td>${item.name}</td>
-        <td>
-          <button onclick="changeStock(${index},-1)">-</button>
-          ${item.qty}
-          <button onclick="changeStock(${index},1)">+</button>
-        </td>
+        <td><img class="product-img" src="${x.image || 'https://via.placeholder.com/60'}"></td>
+        <td class="code">${x.code}</td>
+        <td>${x.name}</td>
+        <td><button onclick="changeStock(${i},-1)">-</button> ${x.qty} <button onclick="changeStock(${i},1)">+</button></td>
         <td>${min}</td>
-        <td>${item.place || "-"}</td>
-        <td><span class="badge ${item.qty<=min?'low':'ok'}">${item.qty<=min?'Kritik':'Yeterli'}</span></td>
+        <td>${x.category || "Diğer"}</td>
+        <td>${x.place || "-"}</td>
+        <td><span class="badge ${x.qty<=min?'low':'ok'}">${x.qty<=min?'Kritik':'Yeterli'}</span></td>
         <td>
-          <button onclick="openEdit(${index})">Düzenle</button>
-          <button onclick="showQR(${index})">QR</button>
-          <button class="danger" onclick="deleteItem(${index})">Sil</button>
+          <button onclick="openEdit(${i})">Düzenle</button>
+          <button onclick="showQR(${i})">QR</button>
+          <button class="danger" onclick="deleteItem(${i})">Sil</button>
         </td>
       </tr>`;
     }
-  });
-
-  totalItems.innerText=items.length;
-  totalStock.innerText=totalQty;
-  lowStock.innerText=lowCount;
-}
-
-function fillProductOptions(){
-  orderProduct.innerHTML="";
-  if(items.length===0){
-    orderProduct.innerHTML=`<option value="">Önce ürün ekle</option>`;
-    return;
-  }
-  items.forEach((item,index)=>{
-    orderProduct.innerHTML+=`<option value="${index}">${item.name} - ${item.code}</option>`;
   });
 }
 
 function addExistingOrder(){
   if(items.length===0){alert("Önce ürün ekle.");return}
-  const product=items[orderProduct.value];
+
+  const product = items[orderProduct.value];
 
   orders.push({
     orderCode:randomCode(),
     productName:product.name,
     productCode:product.code,
+    qty:Number(orderQty.value || 1),
     link:orderLink.value.trim(),
     note:orderNote.value.trim(),
-    status:orderStatus.value
+    status:orderStatus.value,
+    received:false
   });
 
-  saveOrders();
-  orderLink.value="";orderNote.value="";
-  renderOrders();
+  log("Sipariş eklendi: " + product.name);
+  orderQty.value=""; orderLink.value=""; orderNote.value="";
+  saveAll();
+  renderAll();
 }
 
 function addNewProductAndOrder(){
-  const n=newOrderProductName.value.trim();
-  const q=newOrderQty.value;
-  if(n===""||q===""){alert("Yeni ürün adı ve stok adedi gir.");return}
+  if(newOrderProductName.value.trim()==="" || newOrderQty.value===""){
+    alert("Yeni ürün adı ve stok adedi gir.");
+    return;
+  }
 
-  const product={
+  const product = {
     code:randomCode(),
-    name:n,
-    qty:Number(q),
+    name:newOrderProductName.value.trim(),
+    qty:Number(newOrderQty.value),
     minQty:Number(newOrderMinQty.value || 3),
     place:"-",
+    category:newOrderCategory.value,
     image:newOrderImage.value.trim()
   };
 
   items.push(product);
-  saveProducts();
 
   orders.push({
     orderCode:randomCode(),
     productName:product.name,
     productCode:product.code,
+    qty:Number(newOrderQty.value),
     link:newOrderLink.value.trim(),
     note:newOrderNote.value.trim(),
-    status:newOrderStatus.value
+    status:"Sipariş edildi",
+    received:false
   });
 
-  saveOrders();
+  log("Yeni ürün + sipariş eklendi: " + product.name);
 
   newOrderProductName.value="";
   newOrderQty.value="";
@@ -748,47 +720,278 @@ function addNewProductAndOrder(){
   newOrderLink.value="";
   newOrderNote.value="";
 
-  renderProducts();fillProductOptions();renderOrders();
+  saveAll();
+  renderAll();
 }
 
-function updateOrderStatus(index,newStatus){
-  orders[index].status=newStatus;
-  saveOrders();renderOrders();
+function updateOrderStatus(i,value){
+  orders[i].status = value;
+
+  if(value === "Teslim edildi" && !orders[i].received){
+    const product = items.find(x=>x.code === orders[i].productCode);
+    if(product){
+      product.qty += Number(orders[i].qty || 1);
+      orders[i].received = true;
+      log("Sipariş teslim alındı ve stoğa eklendi: " + product.name);
+    }
+  }
+
+  saveAll();
+  renderAll();
 }
 
-function deleteOrder(index){
-  if(confirm("Bu siparişi silmek istiyor musun?")){
-    orders.splice(index,1);saveOrders();renderOrders();
+function deleteOrder(i){
+  if(confirm("Sipariş silinsin mi?")){
+    log("Sipariş silindi: " + orders[i].productName);
+    orders.splice(i,1);
+    saveAll();
+    renderAll();
   }
 }
 
 function renderOrders(){
-  ordersList.innerHTML="";
-  const searchText=orderSearch.value.toLowerCase();
+  ordersList.innerHTML = "";
+  const s = (orderSearch?.value || "").toLowerCase();
 
-  orders.forEach((order,index)=>{
-    const searchable=(order.orderCode+" "+order.productName+" "+order.productCode).toLowerCase();
-    if(searchable.includes(searchText)){
-      ordersList.innerHTML+=`
+  orders.forEach((o,i)=>{
+    const searchable = `${o.orderCode} ${o.productName} ${o.productCode}`.toLowerCase();
+
+    if(searchable.includes(s)){
+      ordersList.innerHTML += `
       <tr>
-        <td class="code">${order.orderCode}</td>
-        <td>${order.productName}</td>
-        <td class="code">${order.productCode}</td>
+        <td class="code">${o.orderCode}</td>
+        <td>${o.productName}</td>
+        <td class="code">${o.productCode}</td>
+        <td>${o.qty || 1}</td>
         <td>
-          <select onchange="updateOrderStatus(${index},this.value)">
-            <option ${order.status==="Sipariş edildi"?"selected":""}>Sipariş edildi</option>
-            <option ${order.status==="Hazırlanıyor"?"selected":""}>Hazırlanıyor</option>
-            <option ${order.status==="Kargoda"?"selected":""}>Kargoda</option>
-            <option ${order.status==="Teslim edildi"?"selected":""}>Teslim edildi</option>
+          <select onchange="updateOrderStatus(${i},this.value)">
+            <option ${o.status==="Sipariş edildi"?"selected":""}>Sipariş edildi</option>
+            <option ${o.status==="Hazırlanıyor"?"selected":""}>Hazırlanıyor</option>
+            <option ${o.status==="Kargoda"?"selected":""}>Kargoda</option>
+            <option ${o.status==="Teslim edildi"?"selected":""}>Teslim edildi</option>
           </select>
         </td>
-        <td>${order.link?`<a style="color:#60a5fa" href="${order.link}" target="_blank">Aç</a>`:"-"}</td>
-        <td>${order.note || "-"}</td>
-        <td><button class="danger" onclick="deleteOrder(${index})">Sil</button></td>
+        <td>${o.link ? `<a href="${o.link}" target="_blank">Aç</a>` : "-"}</td>
+        <td>${o.note || "-"}</td>
+        <td><button class="danger" onclick="deleteOrder(${i})">Sil</button></td>
       </tr>`;
     }
   });
 }
+
+function addProject(){
+  if(projectName.value.trim()===""){alert("Proje adı gir.");return}
+  projects.push({
+    name:projectName.value.trim(),
+    note:projectNote.value.trim(),
+    products:[]
+  });
+  log("Proje eklendi: " + projectName.value.trim());
+  projectName.value="";
+  projectNote.value="";
+  saveAll();
+  renderAll();
+}
+
+function addProductToProject(){
+  if(projects.length===0 || items.length===0){alert("Proje ve ürün gerekli.");return}
+
+  const project = projects[projectSelect.value];
+  const product = items[projectProductSelect.value];
+  const amount = Number(projectProductQty.value || 1);
+
+  project.products.push({
+    productName:product.name,
+    productCode:product.code,
+    qty:amount
+  });
+
+  log(product.name + " projeye eklendi: " + project.name);
+  projectProductQty.value="";
+  saveAll();
+  renderAll();
+}
+
+function deleteProject(i){
+  if(confirm("Proje silinsin mi?")){
+    log("Proje silindi: " + projects[i].name);
+    projects.splice(i,1);
+    saveAll();
+    renderAll();
+  }
+}
+
+function renderProjects(){
+  projectSelect.innerHTML = "";
+  projectProductSelect.innerHTML = "";
+  projectsList.innerHTML = "";
+
+  projects.forEach((p,i)=>{
+    projectSelect.innerHTML += `<option value="${i}">${p.name}</option>`;
+    let productsHtml = p.products.map(x=>`<li>${x.productName} - ${x.qty} adet</li>`).join("");
+
+    projectsList.innerHTML += `
+    <div class="panel">
+      <h2>${p.name}</h2>
+      <div class="panel-body">
+        <p>${p.note || "-"}</p>
+        <ul>${productsHtml || "<li>Ürün yok</li>"}</ul>
+        <button class="danger" onclick="deleteProject(${i})">Projeyi Sil</button>
+      </div>
+    </div>`;
+  });
+
+  items.forEach((x,i)=>{
+    projectProductSelect.innerHTML += `<option value="${i}">${x.name} - ${x.code}</option>`;
+  });
+}
+
+function renderMissing(){
+  missingList.innerHTML = "";
+  items.filter(x=>x.qty <= (x.minQty ?? 3)).forEach(x=>{
+    const need = Math.max((x.minQty ?? 3) - x.qty, 1);
+    missingList.innerHTML += `
+    <tr>
+      <td>${x.name}</td>
+      <td class="code">${x.code}</td>
+      <td>${x.qty}</td>
+      <td>${x.minQty ?? 3}</td>
+      <td>${need}</td>
+    </tr>`;
+  });
+}
+
+function addCategory(){
+  const c = categoryName.value.trim();
+  if(c==="") return;
+  if(!categories.includes(c)) categories.push(c);
+  categoryName.value="";
+  log("Kategori eklendi: " + c);
+  saveAll();
+  renderAll();
+}
+
+function deleteCategory(i){
+  if(confirm("Kategori silinsin mi?")){
+    log("Kategori silindi: " + categories[i]);
+    categories.splice(i,1);
+    saveAll();
+    renderAll();
+  }
+}
+
+function fillCategorySelects(){
+  [categorySelect,newOrderCategory,editCategory].forEach(sel=>{
+    if(!sel) return;
+    sel.innerHTML = "";
+    categories.forEach(c=> sel.innerHTML += `<option>${c}</option>`);
+  });
+}
+
+function renderCategories(){
+  categoryList.innerHTML = "";
+  categories.forEach((c,i)=>{
+    categoryList.innerHTML += `
+      <p><span class="badge info">${c}</span>
+      <button class="danger" onclick="deleteCategory(${i})">Sil</button></p>`;
+  });
+}
+
+function renderLogs(){
+  logsList.innerHTML = "";
+  logs.forEach(l=>{
+    logsList.innerHTML += `<tr><td>${l.time}</td><td>${l.text}</td></tr>`;
+  });
+}
+
+function clearLogs(){
+  if(confirm("Geçmiş temizlensin mi?")){
+    logs = [];
+    saveAll();
+    renderLogs();
+  }
+}
+
+function renderHome(){
+  let totalQty = 0;
+  let low = 0;
+  items.forEach(x=>{
+    totalQty += x.qty;
+    if(x.qty <= (x.minQty ?? 3)) low++;
+  });
+
+  totalItems.innerText = items.length;
+  totalStock.innerText = totalQty;
+  lowStock.innerText = low;
+  activeOrders.innerText = orders.filter(o=>o.status !== "Teslim edildi").length;
+
+  let notes = "";
+  if(low>0) notes += `<p><span class="badge low">${low} ürün kritik stokta.</span></p>`;
+  const kargo = orders.filter(o=>o.status==="Kargoda").length;
+  if(kargo>0) notes += `<p><span class="badge wait">${kargo} sipariş kargoda.</span></p>`;
+  const teslim = orders.filter(o=>o.status==="Teslim edildi" && !o.received).length;
+  if(teslim>0) notes += `<p><span class="badge done">${teslim} sipariş teslim alınabilir.</span></p>`;
+  if(notes==="") notes = `<p><span class="badge ok">Her şey yolunda.</span></p>`;
+
+  notifications.innerHTML = notes;
+  statusBar.innerText = `Ürün: ${items.length} | Sipariş: ${orders.length} | Proje: ${projects.length}`;
+}
+
+function fillProductOptions(){
+  orderProduct.innerHTML = "";
+  if(items.length===0){
+    orderProduct.innerHTML = `<option>Önce ürün ekle</option>`;
+    return;
+  }
+  items.forEach((x,i)=> orderProduct.innerHTML += `<option value="${i}">${x.name} - ${x.code}</option>`);
+}
+
+function exportData(){
+  const data = {items,orders,projects,categories,logs};
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "stok-sistemi-yedek.json";
+  a.click();
+  log("Yedek indirildi");
+}
+
+function importData(e){
+  const file = e.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const data = JSON.parse(reader.result);
+      items = data.items || [];
+      orders = data.orders || [];
+      projects = data.projects || [];
+      categories = data.categories || categories;
+      logs = data.logs || [];
+      saveAll();
+      renderAll();
+      log("Yedek yüklendi");
+    }catch{
+      alert("Yedek dosyası okunamadı.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function renderAll(){
+  fillCategorySelects();
+  fillProductOptions();
+  renderProducts();
+  renderOrders();
+  renderProjects();
+  renderMissing();
+  renderCategories();
+  renderLogs();
+  renderHome();
+}
+
+renderAll();
 </script>
 
 </body>

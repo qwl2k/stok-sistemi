@@ -15,6 +15,11 @@ body{
   color:#e5e7eb;
 }
 
+body.light{
+  background:#f3f5f9;
+  color:#111827;
+}
+
 .hidden{display:none!important}
 
 .login{
@@ -25,11 +30,20 @@ body{
   padding:20px;
 }
 
-.login-card,.panel,.card{
+.login-card,.panel,.card,.side{
   background:#111827;
   border:1px solid #1f2937;
   border-radius:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+body.light .login-card,
+body.light .panel,
+body.light .card,
+body.light .side{
+  background:white;
+  border:1px solid #e5e7eb;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
 .login-card{
@@ -48,6 +62,13 @@ input,select{
   border-radius:10px;
 }
 
+body.light input,
+body.light select{
+  background:white;
+  color:#111827;
+  border:1px solid #d1d5db;
+}
+
 button{
   border:0;
   border-radius:10px;
@@ -58,25 +79,20 @@ button{
   font-weight:bold;
 }
 
-button:hover{opacity:.9}
-
 .danger{background:#dc2626}
 .green{background:#16a34a}
 .orange{background:#f97316}
 
 .app{
   display:grid;
-  grid-template-columns:1fr 220px;
+  grid-template-columns:1fr 230px;
   gap:20px;
-  max-width:1300px;
+  max-width:1350px;
   margin:25px auto;
   padding:15px;
 }
 
 .side{
-  background:#111827;
-  border:1px solid #1f2937;
-  border-radius:18px;
   padding:18px;
   height:max-content;
   position:sticky;
@@ -89,8 +105,14 @@ button:hover{opacity:.9}
   background:#1f2937;
 }
 
+body.light .side button{
+  background:#e5e7eb;
+  color:#111827;
+}
+
 .side button.active{
-  background:#2563eb;
+  background:#2563eb!important;
+  color:white!important;
 }
 
 .topbar{
@@ -107,21 +129,9 @@ button:hover{opacity:.9}
   margin-bottom:18px;
 }
 
-.card{
-  padding:20px;
-}
-
-.card h3{
-  margin:0;
-  color:#94a3b8;
-  font-size:14px;
-}
-
-.card p{
-  font-size:30px;
-  font-weight:bold;
-  margin:8px 0 0;
-}
+.card{padding:20px}
+.card h3{margin:0;color:#94a3b8;font-size:14px}
+.card p{font-size:30px;font-weight:bold;margin:8px 0 0}
 
 .panel{
   padding:22px;
@@ -136,9 +146,11 @@ button:hover{opacity:.9}
 
 .order-form{
   display:grid;
-  grid-template-columns:1fr 1fr 1fr 1fr auto;
+  grid-template-columns:1fr 1fr 1fr 1fr;
   gap:10px;
 }
+
+.full{grid-column:1/-1}
 
 .search-title{
   margin-top:20px;
@@ -157,9 +169,18 @@ th,td{
   text-align:left;
 }
 
+body.light th,body.light td{
+  border-bottom:1px solid #e5e7eb;
+}
+
 th{
   color:#93c5fd;
   background:#020617;
+}
+
+body.light th{
+  background:#f9fafb;
+  color:#2563eb;
 }
 
 .badge{
@@ -174,6 +195,11 @@ th{
 .wait{background:#78350f;color:#fde68a}
 .done{background:#064e3b;color:#86efac}
 
+body.light .ok{background:#dcfce7;color:#166534}
+body.light .low{background:#fee2e2;color:#991b1b}
+body.light .wait{background:#fef3c7;color:#92400e}
+body.light .done{background:#dcfce7;color:#166534}
+
 .code{
   font-family:monospace;
   color:#60a5fa;
@@ -186,6 +212,11 @@ th{
   object-fit:cover;
   border-radius:10px;
   border:1px solid #334155;
+}
+
+.small-note{
+  color:#94a3b8;
+  font-size:13px;
 }
 
 @media(max-width:900px){
@@ -278,18 +309,32 @@ th{
 
       <div class="panel">
         <h2>🧾 Sipariş Ekle</h2>
+        <p class="small-note">Kayıtlı ürün seçebilir veya yeni ürün oluşturup hem stoğa hem siparişlere ekleyebilirsin.</p>
 
         <div class="order-form">
+          <select id="orderMode" onchange="changeOrderMode()">
+            <option value="existing">Kayıtlı üründen seç</option>
+            <option value="new">Yeni ürün oluştur</option>
+          </select>
+
           <select id="orderProduct"></select>
+
+          <input id="newOrderProductName" class="hidden" placeholder="Yeni ürün adı">
+          <input id="newOrderQty" class="hidden" type="number" placeholder="Stok adedi">
+          <input id="newOrderPlace" class="hidden" placeholder="Raf / Konum">
+          <input id="newOrderImage" class="hidden" placeholder="Fotoğraf linki">
+
           <input id="orderLink" placeholder="Sipariş linki">
           <input id="orderNote" placeholder="Not">
+
           <select id="orderStatus">
             <option>Sipariş edildi</option>
             <option>Hazırlanıyor</option>
             <option>Kargoda</option>
             <option>Teslim edildi</option>
           </select>
-          <button class="orange" onclick="addOrder()">Sipariş Ekle</button>
+
+          <button class="orange full" onclick="addOrder()">Sipariş Ekle</button>
         </div>
       </div>
 
@@ -321,6 +366,8 @@ th{
     <h2>Menü</h2>
     <button id="btnProducts" class="active" onclick="showPage('products')">📦 Ürünler</button>
     <button id="btnOrders" onclick="showPage('orders')">🧾 Siparişler</button>
+    <hr style="border:1px solid #1f2937">
+    <button onclick="toggleTheme()" id="themeBtn">☀️ Beyaz Tema</button>
   </aside>
 
 </div>
@@ -328,6 +375,36 @@ th{
 <script>
 let items = JSON.parse(localStorage.getItem("stok")) || [];
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let theme = localStorage.getItem("theme") || "dark";
+
+if(theme === "light"){
+  document.body.classList.add("light");
+}
+
+function updateThemeButton(){
+  const btn = document.getElementById("themeBtn");
+  if(!btn) return;
+
+  if(document.body.classList.contains("light")){
+    btn.innerText = "🌙 Siyah Tema";
+  }else{
+    btn.innerText = "☀️ Beyaz Tema";
+  }
+}
+
+updateThemeButton();
+
+function toggleTheme(){
+  document.body.classList.toggle("light");
+
+  if(document.body.classList.contains("light")){
+    localStorage.setItem("theme","light");
+  }else{
+    localStorage.setItem("theme","dark");
+  }
+
+  updateThemeButton();
+}
 
 function login(){
   const u = document.getElementById("user").value;
@@ -339,6 +416,7 @@ function login(){
     renderProducts();
     renderOrders();
     fillProductOptions();
+    updateThemeButton();
   }else{
     document.getElementById("loginMsg").innerText = "Hatalı kullanıcı adı veya şifre";
   }
@@ -434,7 +512,7 @@ function renderProducts(){
     totalQty += item.qty;
     if(item.qty <= 3) lowCount++;
 
-    const searchable = 
+    const searchable =
       item.name.toLowerCase() + " " +
       item.code.toLowerCase() + " " +
       item.place.toLowerCase();
@@ -442,9 +520,7 @@ function renderProducts(){
     if(searchable.includes(searchText)){
       list.innerHTML += `
       <tr>
-        <td>
-          <img class="product-img" src="${item.image || 'https://via.placeholder.com/60'}">
-        </td>
+        <td><img class="product-img" src="${item.image || 'https://via.placeholder.com/60'}"></td>
         <td class="code">${item.code}</td>
         <td>${item.name}</td>
         <td>${item.qty}</td>
@@ -471,26 +547,77 @@ function fillProductOptions(){
   select.innerHTML = "";
 
   if(items.length === 0){
-    select.innerHTML = `<option>Önce ürün ekle</option>`;
+    select.innerHTML = `<option value="">Önce ürün ekle</option>`;
     return;
   }
 
   items.forEach((item,index)=>{
-    select.innerHTML += `
-      <option value="${index}">
-        ${item.name} - ${item.code}
-      </option>`;
+    select.innerHTML += `<option value="${index}">${item.name} - ${item.code}</option>`;
   });
 }
 
-function addOrder(){
-  if(items.length === 0){
-    alert("Önce ürün eklemelisin.");
-    return;
-  }
+function changeOrderMode(){
+  const mode = document.getElementById("orderMode").value;
+  const orderProduct = document.getElementById("orderProduct");
 
-  const productIndex = document.getElementById("orderProduct").value;
-  const product = items[productIndex];
+  const newFields = [
+    "newOrderProductName",
+    "newOrderQty",
+    "newOrderPlace",
+    "newOrderImage"
+  ];
+
+  if(mode === "new"){
+    orderProduct.classList.add("hidden");
+    newFields.forEach(id => document.getElementById(id).classList.remove("hidden"));
+  }else{
+    orderProduct.classList.remove("hidden");
+    newFields.forEach(id => document.getElementById(id).classList.add("hidden"));
+  }
+}
+
+function addOrder(){
+  const mode = document.getElementById("orderMode").value;
+  let product;
+
+  if(mode === "existing"){
+    if(items.length === 0){
+      alert("Önce ürün eklemelisin veya yeni ürün oluştur seçmelisin.");
+      return;
+    }
+
+    const productIndex = document.getElementById("orderProduct").value;
+    product = items[productIndex];
+
+  }else{
+    const newName = document.getElementById("newOrderProductName").value.trim();
+    const newQty = document.getElementById("newOrderQty").value;
+    const newPlace = document.getElementById("newOrderPlace").value.trim();
+    const newImage = document.getElementById("newOrderImage").value.trim();
+
+    if(newName === "" || newQty === "" || newPlace === ""){
+      alert("Yeni ürün için ürün adı, stok adedi ve konum gir.");
+      return;
+    }
+
+    product = {
+      code: randomCode(),
+      name: newName,
+      qty: Number(newQty),
+      place: newPlace,
+      image: newImage
+    };
+
+    items.push(product);
+    saveProducts();
+    renderProducts();
+    fillProductOptions();
+
+    document.getElementById("newOrderProductName").value = "";
+    document.getElementById("newOrderQty").value = "";
+    document.getElementById("newOrderPlace").value = "";
+    document.getElementById("newOrderImage").value = "";
+  }
 
   orders.push({
     orderCode: randomCode(),
@@ -540,17 +667,15 @@ function renderOrders(){
             ${order.status}
           </span>
         </td>
-        <td>
-          ${order.link ? `<a style="color:#60a5fa" href="${order.link}" target="_blank">Aç</a>` : "-"}
-        </td>
+        <td>${order.link ? `<a style="color:#60a5fa" href="${order.link}" target="_blank">Aç</a>` : "-"}</td>
         <td>${order.note || "-"}</td>
-        <td>
-          <button class="danger" onclick="deleteOrder(${index})">Sil</button>
-        </td>
+        <td><button class="danger" onclick="deleteOrder(${index})">Sil</button></td>
       </tr>`;
     }
   });
 }
+
+changeOrderMode();
 </script>
 
 </body>
